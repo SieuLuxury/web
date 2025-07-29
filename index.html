@@ -59,15 +59,12 @@
             margin: 0 auto;
             padding: 40px 20px;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
 
         .header {
             text-align: center;
             margin-bottom: 60px;
+            position: relative;
         }
 
         .logo {
@@ -78,6 +75,17 @@
             background-clip: text;
             margin-bottom: 20px;
             filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.3));
+            animation: logoGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.3));
+            }
+            50% { 
+                filter: drop-shadow(0 6px 12px rgba(102, 126, 234, 0.5)) 
+                        drop-shadow(0 0 20px rgba(240, 147, 251, 0.3));
+            }
         }
 
         .title {
@@ -89,6 +97,17 @@
             background-clip: text;
             margin-bottom: 15px;
             filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
+            animation: titleGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
+            }
+            50% { 
+                filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.5)) 
+                        drop-shadow(0 0 20px rgba(240, 147, 251, 0.3));
+            }
         }
 
         .subtitle {
@@ -99,24 +118,107 @@
             margin: 0 auto;
         }
 
+        .stats-section {
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, 
+                rgba(102, 126, 234, 0.05) 0%, 
+                rgba(240, 147, 251, 0.03) 30%, 
+                transparent 70%
+            );
+            transform: translate(-50%, -50%);
+            animation: sectionTitleGlow 5s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes sectionTitleGlow {
+            0%, 100% { 
+                opacity: 0.3;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            50% { 
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
+
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            width: 100%;
-            max-width: 800px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            position: relative;
+        }
+
+        .stats-grid::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, 
+                rgba(102, 126, 234, 0.02) 0%, 
+                rgba(240, 147, 251, 0.01) 50%, 
+                transparent 80%
+            );
+            transform: translate(-50%, -50%);
+            animation: gridGlow 5s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes gridGlow {
+            0%, 100% { 
+                opacity: 0.3;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            50% { 
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1.05);
+            }
         }
 
         .stat-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 20px;
-            padding: 40px 30px;
+            padding: 35px 30px;
             text-align: center;
             backdrop-filter: blur(20px);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            animation: cardFloat 3s ease-in-out infinite;
+        }
+
+        .stat-card:nth-child(2) { animation-delay: 0.5s; }
+        .stat-card:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .stat-card::before {
@@ -126,26 +228,78 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(102, 126, 234, 0.1), 
+                transparent
+            );
             transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(240, 147, 251, 0.3));
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: xor;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .stat-card:hover::before {
             left: 100%;
         }
 
+        .stat-card:hover::after {
+            opacity: 1;
+        }
+
         .stat-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-12px) scale(1.02);
             box-shadow: 
                 0 25px 50px -12px rgba(0, 0, 0, 0.6),
-                0 0 0 1px rgba(102, 126, 234, 0.2);
+                0 0 0 1px rgba(102, 126, 234, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                0 0 30px rgba(102, 126, 234, 0.2);
+            background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
             border-color: rgba(102, 126, 234, 0.3);
+            animation: cardHoverGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes cardHoverGlow {
+            0%, 100% { 
+                box-shadow: 
+                    0 25px 50px -12px rgba(0, 0, 0, 0.6),
+                    0 0 0 1px rgba(102, 126, 234, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                    0 0 30px rgba(102, 126, 234, 0.2);
+            }
+            50% { 
+                box-shadow: 
+                    0 25px 50px -12px rgba(0, 0, 0, 0.6),
+                    0 0 0 1px rgba(102, 126, 234, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                    0 0 40px rgba(102, 126, 234, 0.3),
+                    0 0 60px rgba(240, 147, 251, 0.2);
+            }
         }
 
         .stat-card i {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 20px;
             display: block;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover i {
+            transform: scale(1.1);
+            filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.4));
         }
 
         .stat-card h4 {
@@ -153,20 +307,49 @@
             font-weight: 600;
             margin-bottom: 10px;
             color: var(--text-gray);
+            position: relative;
+            z-index: 2;
         }
 
         .stat-card .value {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 900;
             line-height: 1;
+            position: relative;
+            z-index: 2;
+            animation: valueGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes valueGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.2));
+            }
+            50% { 
+                filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.4)) 
+                        drop-shadow(0 0 15px rgba(240, 147, 251, 0.2));
+            }
         }
 
         .success { color: var(--success); }
         .warning { color: var(--warning); }
         .info { color: var(--info); }
+        .primary { 
+            background: var(--primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
         .fade-in {
             animation: fadeIn 1s ease-out;
+        }
+
+        .fade-in-delay-1 {
+            animation: fadeIn 1s ease-out 0.2s both;
+        }
+
+        .fade-in-delay-2 {
+            animation: fadeIn 1s ease-out 0.4s both;
         }
 
         @keyframes fadeIn {
@@ -192,6 +375,10 @@
             .subtitle {
                 font-size: 1rem;
             }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
             
             .stats-grid {
                 grid-template-columns: 1fr;
@@ -199,7 +386,11 @@
             }
             
             .stat-card {
-                padding: 30px 20px;
+                padding: 25px 20px;
+            }
+
+            .stat-card .value {
+                font-size: 2rem;
             }
         }
     </style>
@@ -214,23 +405,47 @@
             <p class="subtitle">Hệ thống kiểm tra thẻ tín dụng chuyên nghiệp và hiện đại nhất với công nghệ tiên tiến.</p>
         </header>
 
-        <div class="stats-grid fade-in" style="animation-delay: 0.3s;">
-            <div class="stat-card">
-                <i class="fas fa-check-circle success"></i>
-                <h4>Checked Today</h4>
-                <div class="value success">1,234</div>
+        <section class="stats-section fade-in-delay-1">
+            <h2 class="section-title">Global Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-users info"></i>
+                    <h4>Total Users</h4>
+                    <div class="value info">15,847</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-credit-card success"></i>
+                    <h4>Total Charged Cards</h4>
+                    <div class="value success">2,341,567</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-circle warning"></i>
+                    <h4>Total Live Cards</h4>
+                    <div class="value warning">892,456</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <i class="fas fa-percentage info"></i>
-                <h4>Success Rate</h4>
-                <div class="value info">87.5%</div>
+        </section>
+
+        <section class="stats-section fade-in-delay-2">
+            <h2 class="section-title">Your Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-credit-card success"></i>
+                    <h4>Charged Cards</h4>
+                    <div class="value success">1,234</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-circle warning"></i>
+                    <h4>Live Cards</h4>
+                    <div class="value warning">567</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-coins primary"></i>
+                    <h4>Credits</h4>
+                    <div class="value primary">∞</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <i class="fas fa-coins warning"></i>
-                <h4>Credits Left</h4>
-                <div class="value warning">∞</div>
-            </div>
-        </div>
+        </section>
     </div>
 </body>
 </html>
