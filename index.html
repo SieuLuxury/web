@@ -164,6 +164,12 @@
             justify-content: center;
             width: 50px;
             height: 50px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section-header:hover .section-header-logo {
+            transform: scale(1.1);
+            filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.4));
         }
 
         .section-header-logo i {
@@ -359,7 +365,7 @@
                 0 0 30px rgba(102, 126, 234, 0.2);
             background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
             border-color: rgba(102, 126, 234, 0.4);
-            animation: itemHoverGlow 2s ease-in-out infinite;
+            animation: itemHoverGlow 3s ease-in-out infinite;
         }
 
         .stat-card:active {
@@ -382,8 +388,8 @@
         }
 
         .stat-card:hover i {
-            transform: scale(1.1);
-            filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.4));
+            transform: scale(1.15);
+            filter: drop-shadow(0 6px 12px rgba(102, 126, 234, 0.5));
         }
 
         /* EXACT MODAL ITEM TITLE STYLE */
@@ -398,29 +404,37 @@
 
         /* EXACT MODAL ITEM VALUE STYLE */
         .stat-card .value {
-            font-size: 2.5rem;
-            font-weight: 900;
+            font-size: 2.2rem;
+            font-weight: 800;
             line-height: 1;
             position: relative;
             z-index: 2;
             color: var(--text-white);
-            filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.2));
+            filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.15));
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card:hover .value {
+            transform: scale(1.05);
+            filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.25));
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
         }
 
         /* Color overrides for specific stats - WHITE TEXT */
         .stat-card .value.success { 
             color: var(--text-white);
-            filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.2));
+            filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.15));
         }
 
         .stat-card .value.warning { 
             color: var(--text-white);
-            filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.2));
+            filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.15));
         }
 
         .stat-card .value.info { 
             color: var(--text-white);
-            filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.2));
+            filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.15));
         }
 
         /* Animation keyframes from modal */
