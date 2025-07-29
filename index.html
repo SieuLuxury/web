@@ -9,7 +9,7 @@
     <style>
         /* Home Page - Exact Modal Style */
         .home-container {
-            max-width: 1200px;
+            max-width: 1160px;
             margin: 0 auto;
             padding: 40px 20px;
             min-height: 100vh;
@@ -91,7 +91,7 @@
             position: relative;
             overflow: hidden;
             animation: modalPulse 4s ease-in-out infinite;
-            max-width: 1200px;
+            width: 100%;
             margin: 0 auto;
         }
 
@@ -158,6 +158,13 @@
             background-clip: text;
             filter: drop-shadow(0 3px 6px rgba(102, 126, 234, 0.3));
             animation: logoGlow 4s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-header-logo i {
+            display: block;
         }
 
         .section-header:hover {
@@ -542,6 +549,7 @@
         @media (max-width: 768px) {
             .home-container {
                 padding: 20px 15px;
+                max-width: 100%;
             }
             
             .home-title {
@@ -554,7 +562,7 @@
 
             .section-container {
                 padding: 35px 25px;
-                max-width: 100%;
+                width: 100%;
             }
 
             .section-title {
