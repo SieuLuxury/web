@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium CC Checker - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Load Navigation -->
+    <script src="assets/navigation-loader.js"></script>
+    <script>
+        loadNavigation('home', false);
+    </script>
+
+    <!-- Main Content (hidden until navigation loads) -->
+    <main class="main-content" style="opacity: 0; visibility: hidden;" id="mainContent">
+        <header class="page-header">
+            <h1>Welcome Home</h1>
+            <p>Premium Credit Card Validation System</p>
+        </header>
+
+        <section class="content-area">
+            <div class="form-container fade-in">
+                <div style="text-align: center; padding: 50px 20px;">
+                    <i class="fas fa-home" style="font-size: 4.5rem; background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 30px; display: block;"></i>
+                    <h3 style="margin-bottom: 20px; font-size: 2rem; font-weight: 700;">Chào mừng đến với Premium CC Checker</h3>
+                    <p style="color: var(--text-gray); font-size: 1.1rem; line-height: 1.6;">Hệ thống kiểm tra thẻ tín dụng chuyên nghiệp và hiện đại nhất với công nghệ tiên tiến.</p>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                    <h4>Checked Today</h4>
+                    <p class="value" style="color: var(--success);">1,234</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-percentage" style="color: var(--info);"></i>
+                    <h4>Success Rate</h4>
+                    <p class="value" style="color: var(--info);">87.5%</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-coins" style="color: var(--warning);"></i>
+                    <h4>Credits Left</h4>
+                    <p class="value" style="color: var(--warning);">∞</p>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
