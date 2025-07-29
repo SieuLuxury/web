@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium CC Checker - System Logs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <!-- Load Navigation -->
+    <script src="../assets/navigation-loader.js"></script>
+    <script>
+        loadNavigation('database-logs', true);
+    </script>
+
+    <!-- Main Content (hidden until navigation loads) -->
+    <main class="main-content" style="opacity: 0; visibility: hidden;" id="mainContent">
+        <header class="page-header">
+            <h1>System Logs</h1>
+            <p>Monitor system activities and events</p>
+        </header>
+
+        <section class="content-area">
+            <div class="database-container fade-in">
+                <div class="database-header">
+                    <div class="database-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3>System Activity Logs</h3>
+                        <span class="record-count">0 Records</span>
+                    </div>
+                    <div class="database-actions">
+                        <button class="btn btn-secondary" onclick="refreshLogs()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearLogs()">
+                            <i class="fas fa-trash"></i> Clear Logs
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                        <div class="empty-icon-bg"></div>
+                    </div>
+                    <h3 class="empty-title">No System Logs Found</h3>
+                    <p class="empty-description">
+                        System logs will appear here when activities are recorded. This includes user actions, system events, and security alerts.
+                    </p>
+                    <div class="empty-actions">
+                        <button class="btn btn-primary" onclick="generateSampleLogs()">
+                            <i class="fas fa-plus"></i> Generate Sample Logs
+                        </button>
+                        <button class="btn btn-secondary" onclick="refreshLogs()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    
+                    <div class="empty-illustration">
+                        <div class="illustration-line"></div>
+                        <div class="illustration-circle"></div>
+                        <div class="illustration-line"></div>
+                        <div class="illustration-circle"></div>
+                        <div class="illustration-line"></div>
+                        <div class="illustration-circle"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

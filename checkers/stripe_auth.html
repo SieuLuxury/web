@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium CC Checker - Stripe Auth</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <!-- Load Navigation -->
+    <script src="../assets/navigation-loader.js"></script>
+    <script>
+        loadNavigation('stripe-auth', true);
+    </script>
+
+    <!-- Main Content (hidden until navigation loads) -->
+    <main class="main-content" style="opacity: 0; visibility: hidden;" id="mainContent">
+        <header class="page-header">
+            <h1>Stripe Auth Checker</h1>
+            <p>Check credit cards using Stripe authentication</p>
+        </header>
+
+        <section class="content-area">
+            <div class="form-container fade-in">
+                <h3 style="margin-bottom: 30px; font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; gap: 15px;">
+                    <i class="fab fa-stripe" style="font-size: 2rem; background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+                    Stripe Auth Checker
+                </h3>
+                
+                <div class="form-group">
+                    <label for="stripeCards">Credit Cards (one per line)</label>
+                    <textarea id="stripeCards" class="form-control" rows="10" placeholder="4532123456789012|12|2025|123&#10;5555555555554444|01|2026|456&#10;4111111111111111|03|2027|789&#10;4000000000000002|05|2025|321&#10;5105105105105100|08|2026|654"></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="startStripeCheck()">
+                        <i class="fas fa-play"></i>
+                        Start Check
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearResults()">
+                        <i class="fas fa-trash"></i>
+                        Clear Results
+                    </button>
+                    <button class="btn btn-secondary" onclick="loadSampleCards('stripe')">
+                        <i class="fas fa-magic"></i>
+                        Load Sample
+                    </button>
+                </div>
+                
+                <div id="stripeResults"></div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
