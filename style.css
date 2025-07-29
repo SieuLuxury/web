@@ -332,6 +332,34 @@ body::before {
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.modal-overlay::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, 
+        rgba(102, 126, 234, 0.03) 0%, 
+        rgba(240, 147, 251, 0.02) 30%, 
+        transparent 70%
+    );
+    transform: translate(-50%, -50%);
+    animation: overlayGlow 6s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes overlayGlow {
+    0%, 100% { 
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    50% { 
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
 .modal-overlay.active {
     display: flex;
     opacity: 1;
@@ -353,6 +381,33 @@ body::before {
     transform: scale(0.85) translateY(30px) rotateX(5deg);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
+}
+
+.modal-content::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, 
+        rgba(102, 126, 234, 0.3), 
+        rgba(240, 147, 251, 0.3), 
+        rgba(102, 126, 234, 0.3)
+    );
+    border-radius: 22px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: modalBorderGlow 4s ease-in-out infinite;
+}
+
+@keyframes modalBorderGlow {
+    0%, 100% { 
+        opacity: 0;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.3;
+        transform: scale(1.02);
+    }
 }
 
 .modal-content::before {
@@ -641,12 +696,68 @@ body::before {
     padding: 28px;
     max-height: 60vh;
     overflow-y: auto;
+    position: relative;
+}
+
+.modal-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(102, 126, 234, 0.2), 
+        rgba(240, 147, 251, 0.2), 
+        transparent
+    );
+    animation: bodyGlow 3s ease-in-out infinite;
+}
+
+@keyframes bodyGlow {
+    0%, 100% { 
+        opacity: 0;
+    }
+    50% { 
+        opacity: 1;
+    }
 }
 
 .modal-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
+    position: relative;
+}
+
+.modal-grid::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, 
+        rgba(102, 126, 234, 0.02) 0%, 
+        rgba(240, 147, 251, 0.01) 50%, 
+        transparent 80%
+    );
+    transform: translate(-50%, -50%);
+    animation: gridGlow 5s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes gridGlow {
+    0%, 100% { 
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    50% { 
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
 }
 
 .modal-item {
@@ -719,9 +830,29 @@ body::before {
     box-shadow: 
         0 20px 40px -8px rgba(0, 0, 0, 0.7),
         0 0 0 1px rgba(102, 126, 234, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 30px rgba(102, 126, 234, 0.2);
     background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
     border-color: rgba(102, 126, 234, 0.4);
+    animation: itemHoverGlow 2s ease-in-out infinite;
+}
+
+@keyframes itemHoverGlow {
+    0%, 100% { 
+        box-shadow: 
+            0 20px 40px -8px rgba(0, 0, 0, 0.7),
+            0 0 0 1px rgba(102, 126, 234, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15),
+            0 0 30px rgba(102, 126, 234, 0.2);
+    }
+    50% { 
+        box-shadow: 
+            0 20px 40px -8px rgba(0, 0, 0, 0.7),
+            0 0 0 1px rgba(102, 126, 234, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15),
+            0 0 40px rgba(102, 126, 234, 0.3),
+            0 0 60px rgba(240, 147, 251, 0.2);
+    }
 }
 
 .modal-item:active {

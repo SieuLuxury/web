@@ -285,13 +285,13 @@ function closeModal(event) {
         }, 100);
     }
     
-    toastManager.success('Modal Closed', 'Modal has been closed successfully');
+    // Removed toast notification for cleaner UX
 }
 
 function selectModalItem(itemId) {
     closeModal();
     goToPage(itemId);
-    toastManager.success('Page Selected', `Navigated to ${itemId.replace('-', ' ').toUpperCase()}`);
+    // Removed toast notification for cleaner UX
 }
 
 // Sample data functions
