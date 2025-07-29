@@ -148,9 +148,31 @@ function showModal(type) {
     const modalIcon = document.getElementById('modalIcon');
     const modalTitleText = document.getElementById('modalTitleText');
     const modalGrid = document.getElementById('modalGrid');
+    const modalHeader = document.querySelector('.modal-header');
 
     modalIcon.className = config.icon;
     modalTitleText.textContent = config.title;
+
+    // Add glow effect to modal header
+    if (modalHeader && !modalHeader.querySelector('.glow-effect')) {
+        const glowEffect = document.createElement('div');
+        glowEffect.className = 'glow-effect';
+        modalHeader.appendChild(glowEffect);
+    }
+
+    // Add particles to modal header
+    if (modalHeader && !modalHeader.querySelector('.particles')) {
+        const particles = document.createElement('div');
+        particles.className = 'particles';
+        
+        for (let i = 0; i < 4; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particles.appendChild(particle);
+        }
+        
+        modalHeader.appendChild(particles);
+    }
 
     let itemsHTML = '';
     config.items.forEach(item => {
