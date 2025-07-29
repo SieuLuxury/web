@@ -404,8 +404,8 @@ body::before {
 @keyframes headerEntrance {
     0% {
         opacity: 0;
-        transform: translateY(-20px);
-        filter: blur(10px);
+        transform: translateY(-15px);
+        filter: blur(5px);
     }
     100% {
         opacity: 1;
@@ -439,11 +439,11 @@ body::before {
 }
 
 .modal-header:hover {
-    background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
-    border-bottom-color: rgba(102, 126, 234, 0.3);
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    border-bottom-color: rgba(102, 126, 234, 0.2);
     box-shadow: 
-        0 0 30px rgba(102, 126, 234, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        0 0 20px rgba(102, 126, 234, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .modal-header::before {
@@ -455,12 +455,12 @@ body::before {
     height: 100%;
     background: linear-gradient(90deg, 
         transparent, 
-        rgba(102, 126, 234, 0.1), 
-        rgba(240, 147, 251, 0.1), 
-        rgba(102, 126, 234, 0.1), 
+        rgba(102, 126, 234, 0.05), 
+        rgba(240, 147, 251, 0.05), 
+        rgba(102, 126, 234, 0.05), 
         transparent
     );
-    animation: headerShimmer 3s ease-in-out infinite;
+    animation: headerShimmer 4s ease-in-out infinite;
     z-index: 1;
 }
 
@@ -473,12 +473,12 @@ body::before {
     height: 1px;
     background: linear-gradient(90deg, 
         transparent, 
-        rgba(102, 126, 234, 0.6), 
-        rgba(240, 147, 251, 0.6), 
-        rgba(102, 126, 234, 0.6), 
+        rgba(102, 126, 234, 0.4), 
+        rgba(240, 147, 251, 0.4), 
+        rgba(102, 126, 234, 0.4), 
         transparent
     );
-    animation: headerGlow 2s ease-in-out infinite;
+    animation: headerGlow 3s ease-in-out infinite;
     z-index: 2;
 }
 
@@ -486,27 +486,27 @@ body::before {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 200%;
-    height: 200%;
+    width: 150%;
+    height: 150%;
     background: radial-gradient(circle, 
-        rgba(102, 126, 234, 0.1) 0%, 
-        rgba(240, 147, 251, 0.05) 30%, 
+        rgba(102, 126, 234, 0.06) 0%, 
+        rgba(240, 147, 251, 0.03) 40%, 
         transparent 70%
     );
     transform: translate(-50%, -50%);
-    animation: headerRadialGlow 4s ease-in-out infinite;
+    animation: headerRadialGlow 5s ease-in-out infinite;
     z-index: 0;
     pointer-events: none;
 }
 
 @keyframes headerRadialGlow {
     0%, 100% { 
-        opacity: 0.3;
-        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.2;
+        transform: translate(-50%, -50%) scale(0.9);
     }
     50% { 
-        opacity: 0.6;
-        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.4;
+        transform: translate(-50%, -50%) scale(1.1);
     }
 }
 
@@ -522,11 +522,11 @@ body::before {
 
 .modal-header .particle {
     position: absolute;
-    width: 4px;
-    height: 4px;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(240, 147, 251, 0.8));
+    width: 3px;
+    height: 3px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.4), rgba(240, 147, 251, 0.4));
     border-radius: 50%;
-    animation: particleFloat 3s ease-in-out infinite;
+    animation: particleFloat 4s ease-in-out infinite;
 }
 
 .modal-header .particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
@@ -558,12 +558,10 @@ body::before {
 
 @keyframes headerGlow {
     0%, 100% { 
-        opacity: 0.3;
-        box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        opacity: 0.2;
     }
     50% { 
-        opacity: 1;
-        box-shadow: 0 0 20px rgba(102, 126, 234, 0.4), 0 0 30px rgba(240, 147, 251, 0.3);
+        opacity: 0.4;
     }
 }
 
@@ -585,11 +583,11 @@ body::before {
 
 @keyframes titleGlow {
     0%, 100% { 
-        filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
+        filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.2));
     }
     50% { 
-        filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.5)) 
-                drop-shadow(0 0 20px rgba(240, 147, 251, 0.3));
+        filter: drop-shadow(0 3px 6px rgba(102, 126, 234, 0.3)) 
+                drop-shadow(0 0 15px rgba(240, 147, 251, 0.2));
     }
 }
 
@@ -629,30 +627,14 @@ body::before {
 }
 
 .modal-close:hover {
-    background: rgba(248, 113, 113, 0.15);
+    background: rgba(248, 113, 113, 0.12);
     color: var(--error);
-    transform: scale(1.1) rotate(90deg);
-    border: 1px solid rgba(248, 113, 113, 0.3);
+    transform: scale(1.05) rotate(90deg);
+    border: 1px solid rgba(248, 113, 113, 0.2);
     box-shadow: 
-        0 4px 12px rgba(248, 113, 113, 0.2),
-        0 0 20px rgba(248, 113, 113, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    animation: closeButtonGlow 1s ease-in-out infinite;
-}
-
-@keyframes closeButtonGlow {
-    0%, 100% { 
-        box-shadow: 
-            0 4px 12px rgba(248, 113, 113, 0.2),
-            0 0 20px rgba(248, 113, 113, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
-    50% { 
-        box-shadow: 
-            0 4px 12px rgba(248, 113, 113, 0.3),
-            0 0 30px rgba(248, 113, 113, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    }
+        0 2px 8px rgba(248, 113, 113, 0.15),
+        0 0 15px rgba(248, 113, 113, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .modal-body {

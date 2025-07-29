@@ -205,8 +205,7 @@ function showModal(type) {
     highlightNavigation(type);
 
 
-    // Show toast
-    toastManager.info('Modal Opened', `${config.title} modal has been opened`);
+    // Removed toast notification for cleaner UX
 }
 
 // Function to highlight navigation items (USE CSS CLASSES FOR GLOW EFFECT)
