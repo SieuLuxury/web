@@ -2319,6 +2319,7 @@ select option:checked {
     
     .main-content {
         padding: 100px 16px 100px 16px;
+        max-width: none;
     }
     
     /* Home Page Mobile Styles */
