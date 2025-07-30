@@ -2330,18 +2330,21 @@ select option:checked {
     }
 
     .home-header {
-        width: 343px;
+        width: 100%;
+        max-width: 343px;
         margin: 0 auto 40px auto;
     }
 
     .section-container {
-        width: 343px;
+        width: 100%;
+        max-width: 343px;
         margin: 0 auto;
         padding: 35px 25px;
     }
 
     .stats-section {
-        width: 343px;
+        width: 100%;
+        max-width: 343px;
         margin: 0 auto 40px auto;
     }
 
