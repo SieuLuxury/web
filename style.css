@@ -2318,9 +2318,7 @@ select option:checked {
     }
     
     .main-content {
-        max-width: 343px;
-        margin: 0 auto;
-        padding: 100px 16px 100px 16px;
+        padding: 100px 0 100px 0;
     }
     
     .home-title {
@@ -2332,15 +2330,19 @@ select option:checked {
     }
 
     .home-header {
-        margin-bottom: 40px;
+        width: 343px;
+        margin: 0 auto 40px auto;
     }
 
     .section-container {
+        width: 343px;
+        margin: 0 auto;
         padding: 35px 25px;
     }
 
     .stats-section {
-        margin-bottom: 40px;
+        width: 343px;
+        margin: 0 auto 40px auto;
     }
 
     .section-title {
