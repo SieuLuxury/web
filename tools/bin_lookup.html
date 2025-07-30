@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium CC Checker - BIN Lookup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <!-- Load Navigation -->
+    <script src="../assets/navigation-loader.js"></script>
+    <script>
+        loadNavigation('bin-lookup', true);
+    </script>
+
+    <!-- Main Content (hidden until navigation loads) -->
+    <main class="main-content" style="opacity: 0; visibility: hidden;" id="mainContent">
+        <header class="page-header">
+            <h1>BIN Lookup</h1>
+            <p>Look up Bank Identification Number information</p>
+        </header>
+
+        <section class="content-area">
+            <div class="form-container fade-in">
+                <h3 style="margin-bottom: 30px; font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; gap: 15px;">
+                    <i class="fas fa-search" style="font-size: 2rem; background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+                    BIN Lookup Tool
+                </h3>
+                
+                <div class="form-group">
+                    <label for="binNumber">BIN Number (first 6-8 digits)</label>
+                    <input type="text" id="binNumber" class="form-control" placeholder="453212" maxlength="8">
+                </div>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="lookupBIN()">
+                        <i class="fas fa-search"></i>
+                        Lookup BIN
+                    </button>
+                    <button class="btn btn-secondary" onclick="loadSampleBIN()">
+                        <i class="fas fa-magic"></i>
+                        Try Sample
+                    </button>
+                </div>
+                
+                <div id="binResults"></div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

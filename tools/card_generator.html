@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium CC Checker - Card Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <!-- Load Navigation -->
+    <script src="../assets/navigation-loader.js"></script>
+    <script>
+        loadNavigation('card-generator', true);
+    </script>
+
+    <!-- Main Content (hidden until navigation loads) -->
+    <main class="main-content" style="opacity: 0; visibility: hidden;" id="mainContent">
+        <header class="page-header">
+            <h1>Card Generator</h1>
+            <p>Generate valid test credit card numbers for development</p>
+        </header>
+
+        <section class="content-area">
+            <div class="form-container fade-in">
+                <div class="form-group">
+                    <label for="cardBrand">Card Brand</label>
+                    <div class="select-wrapper">
+                        <select id="cardBrand" class="form-control">
+                            <option value="visa">Visa</option>
+                            <option value="mastercard">Mastercard</option>
+                            <option value="amex">American Express</option>
+                            <option value="discover">Discover</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cardCount">Number of Cards</label>
+                    <input type="number" id="cardCount" class="form-control" placeholder="Enter number of cards to generate" min="1" max="100" value="10">
+                </div>
+                
+                <div class="form-group" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="generateCards()">
+                        <i class="fas fa-random"></i>
+                        Generate Cards
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearGenerated()">
+                        <i class="fas fa-trash"></i>
+                        Clear
+                    </button>
+                </div>
+                
+                <div id="generatedResults"></div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
