@@ -2318,13 +2318,14 @@ select option:checked {
     }
     
     .main-content {
-        padding: 100px 16px 100px 16px;
+        padding: 100px 0 100px 0;
     }
     
     /* Home Page Mobile Styles - Simple */
     .main-content {
         max-width: 343px;
         margin: 0 auto;
+        padding: 100px 16px 100px 16px;
     }
     
     .home-title {
