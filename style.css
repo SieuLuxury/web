@@ -2323,9 +2323,9 @@ select option:checked {
     
     /* Home Page Mobile Styles */
     .home-container {
-        padding: 20px 16px;
-        width: 100%;
-        margin: 0;
+        padding: 20px 0;
+        width: calc(100% - 32px);
+        margin: 0 auto;
     }
     
     .home-title {
