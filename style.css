@@ -2348,6 +2348,11 @@ select option:checked {
         margin: 0 auto;
     }
 
+    .stats-section {
+        width: 343px;
+        margin: 0 auto 50px auto;
+    }
+
     .section-title {
         font-size: 1.6rem;
     }
