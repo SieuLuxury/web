@@ -2322,10 +2322,9 @@ select option:checked {
     }
     
     /* Home Page Mobile Styles - Simple */
-    .home-container {
+    .main-content {
         max-width: 343px;
         margin: 0 auto;
-        padding: 0 16px;
     }
     
     .home-title {
@@ -3457,13 +3456,6 @@ select option:checked {
 }
 
 /* Home Page Styles - Clean and Simple */
-.home-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    min-height: 100vh;
-}
 
 .home-header {
     text-align: center;
@@ -3472,24 +3464,24 @@ select option:checked {
 }
 
 .home-logo {
-    font-size: 4rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.3));
-    animation: logoGlow 4s ease-in-out infinite;
-}
-
-.home-title {
     font-size: 3rem;
-    font-weight: 900;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 15px;
+    filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.3));
+    animation: logoGlow 4s ease-in-out infinite;
+}
+
+.home-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
     filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
     animation: titleGlow 4s ease-in-out infinite;
 }
@@ -3512,12 +3504,12 @@ select option:checked {
     background: linear-gradient(145deg, rgba(15, 15, 35, 0.95), rgba(20, 20, 45, 0.92));
     backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 20px;
+    border-radius: 16px;
     box-shadow: 
-        0 32px 64px -12px rgba(0, 0, 0, 0.9),
+        0 24px 48px -8px rgba(0, 0, 0, 0.9),
         0 0 0 1px rgba(255, 255, 255, 0.08),
         inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    padding: 45px 40px;
+    padding: 30px 25px;
     position: relative;
     overflow: hidden;
     animation: modalPulse 4s ease-in-out infinite;
@@ -3556,7 +3548,7 @@ select option:checked {
 
 /* Section Header - Clean Modal Style */
 .section-header {
-    padding: 30px 35px 25px;
+    padding: 20px 25px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-between;
@@ -3566,8 +3558,8 @@ select option:checked {
     overflow: hidden;
     backdrop-filter: blur(15px);
     transition: all 0.3s ease;
-    margin: -45px -40px 35px -40px;
-    border-radius: 20px 20px 0 0;
+    margin: -30px -25px 25px -25px;
+    border-radius: 16px 16px 0 0;
 }
 
 .section-header-left {
@@ -3687,7 +3679,7 @@ select option:checked {
 
 /* Section Title - Clean Modal Style */
 .section-title {
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 800;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     -webkit-background-clip: text;
@@ -3728,10 +3720,10 @@ select option:checked {
 
 /* Stat Card - Clean Modal Style */
 .stat-card {
-    padding: 30px 25px;
+    padding: 20px 18px;
     background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 16px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     text-decoration: none;
@@ -3802,8 +3794,8 @@ select option:checked {
 
 /* Stat Card Icon - Different Colors */
 .stat-card i {
-    font-size: 3.2rem;
-    margin-bottom: 25px;
+    font-size: 2.5rem;
+    margin-bottom: 18px;
     position: relative;
     z-index: 2;
     transition: all 0.3s ease;
@@ -3888,9 +3880,9 @@ select option:checked {
 
 /* Stat Card Title */
 .stat-card h4 {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     position: relative;
     z-index: 2;
     line-height: 1.3;
@@ -3898,7 +3890,7 @@ select option:checked {
 
 /* Stat Card Value - Smaller White Numbers */
 .stat-card .value {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: 800;
     line-height: 1;
     position: relative;
