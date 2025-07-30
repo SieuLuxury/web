@@ -2324,7 +2324,7 @@ select option:checked {
     /* Home Page Mobile Styles */
     .home-container {
         padding: 0;
-        max-width: 92%;
+        width: 343px;
         margin: 0 auto;
     }
     
