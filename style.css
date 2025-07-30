@@ -2324,7 +2324,7 @@ select option:checked {
     
     /* Home Page Mobile Styles - Clean and Simple */
     .home-container {
-        padding: 20px 16px;
+        padding: 0;
         max-width: 343px;
         margin: 0 auto;
     }
@@ -2339,10 +2339,12 @@ select option:checked {
 
     .home-header {
         margin-bottom: 40px;
+        padding: 0 16px;
     }
 
     .section-container {
         padding: 35px 25px;
+        margin: 0 16px;
     }
 
     .stats-section {
