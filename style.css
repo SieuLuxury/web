@@ -2322,11 +2322,11 @@ select option:checked {
         max-width: none;
     }
     
-    /* Home Page Mobile Styles - Clean and Simple */
+    /* Home Page Mobile Styles - Simple */
     .home-container {
-        padding: 0;
         max-width: 343px;
         margin: 0 auto;
+        padding: 0 16px;
     }
     
     .home-title {
@@ -2339,12 +2339,10 @@ select option:checked {
 
     .home-header {
         margin-bottom: 40px;
-        padding: 0 16px;
     }
 
     .section-container {
         padding: 35px 25px;
-        margin: 0 16px;
     }
 
     .stats-section {
