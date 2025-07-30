@@ -2323,10 +2323,9 @@ select option:checked {
     }
     
     /* Home Page Mobile Styles - Simple */
-    .main-content {
+    .main-content.home-page {
         max-width: 343px;
         margin: 0 auto;
-        padding: 100px 16px 100px 16px;
     }
     
     .home-title {
