@@ -3504,12 +3504,12 @@ select option:checked {
     background: linear-gradient(145deg, rgba(15, 15, 35, 0.95), rgba(20, 20, 45, 0.92));
     backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 16px;
+    border-radius: 12px;
     box-shadow: 
-        0 24px 48px -8px rgba(0, 0, 0, 0.9),
+        0 16px 32px -4px rgba(0, 0, 0, 0.9),
         0 0 0 1px rgba(255, 255, 255, 0.08),
         inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    padding: 30px 25px;
+    padding: 20px 18px;
     position: relative;
     overflow: hidden;
     animation: modalPulse 4s ease-in-out infinite;
@@ -3548,7 +3548,7 @@ select option:checked {
 
 /* Section Header - Clean Modal Style */
 .section-header {
-    padding: 20px 25px 20px;
+    padding: 15px 18px 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-between;
@@ -3558,8 +3558,8 @@ select option:checked {
     overflow: hidden;
     backdrop-filter: blur(15px);
     transition: all 0.3s ease;
-    margin: -30px -25px 25px -25px;
-    border-radius: 16px 16px 0 0;
+    margin: -20px -18px 20px -18px;
+    border-radius: 12px 12px 0 0;
 }
 
 .section-header-left {
@@ -3571,7 +3571,7 @@ select option:checked {
 }
 
 .section-header-logo {
-    font-size: 2.2rem;
+    font-size: 1.6rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -3581,8 +3581,8 @@ select option:checked {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -3679,8 +3679,8 @@ select option:checked {
 
 /* Section Title - Clean Modal Style */
 .section-title {
-    font-size: 1.6rem;
-    font-weight: 800;
+    font-size: 1.2rem;
+    font-weight: 700;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -3720,10 +3720,10 @@ select option:checked {
 
 /* Stat Card - Clean Modal Style */
 .stat-card {
-    padding: 20px 18px;
+    padding: 15px 12px;
     background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 12px;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     text-decoration: none;
@@ -3794,8 +3794,8 @@ select option:checked {
 
 /* Stat Card Icon - Different Colors */
 .stat-card i {
-    font-size: 2.5rem;
-    margin-bottom: 18px;
+    font-size: 2rem;
+    margin-bottom: 12px;
     position: relative;
     z-index: 2;
     transition: all 0.3s ease;
@@ -3880,9 +3880,9 @@ select option:checked {
 
 /* Stat Card Title */
 .stat-card h4 {
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 8px;
     position: relative;
     z-index: 2;
     line-height: 1.3;
@@ -3890,8 +3890,8 @@ select option:checked {
 
 /* Stat Card Value - Smaller White Numbers */
 .stat-card .value {
-    font-size: 1.8rem;
-    font-weight: 800;
+    font-size: 1.5rem;
+    font-weight: 700;
     line-height: 1;
     position: relative;
     z-index: 2;
