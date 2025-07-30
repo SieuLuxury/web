@@ -2323,7 +2323,7 @@ select option:checked {
     
     /* Home Page Mobile Styles */
     .home-container {
-        padding: 20px 0;
+        padding: 0;
         width: 100%;
         margin: 0;
     }
