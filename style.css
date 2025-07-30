@@ -2323,10 +2323,10 @@ select option:checked {
     }
     
     /* Home Page Mobile Styles - Simple */
-    .home-container {
+    .main-content {
         max-width: 343px;
         margin: 0 auto;
-        padding: 0 16px;
+        padding: 100px 16px 100px 16px;
     }
     
     .home-title {
@@ -3458,13 +3458,6 @@ select option:checked {
 }
 
 /* Home Page Styles - Clean and Simple */
-.home-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    min-height: 100vh;
-}
 
 .home-header {
     text-align: center;
