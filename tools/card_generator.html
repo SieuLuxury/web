@@ -63,6 +63,10 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
         label {
             display: block;
             margin-bottom: 8px;
@@ -102,6 +106,25 @@
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
+        }
+        .results-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: white;
+        }
+        .results-table tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .card-number {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #00ff00;
+        }
+        .expiry {
+            color: #ffd700;
+        }
+        .cvv {
+            color: #ff6b6b;
         }
     </style>
 </head>
@@ -258,9 +281,37 @@
                             <i class="fas fa-download"></i>
                             Download
                         </button>
+                        <button class="btn btn-secondary" onclick="clearResults()">
+                            <i class="fas fa-trash"></i>
+                            Clear
+                        </button>
                     </div>
                     
-                    <div id="generatedCards"></div>
+                    <!-- Results Table -->
+                    <div class="results-table-container" style="margin-bottom: 20px;">
+                        <table class="results-table" id="resultsTable" style="width: 100%; border-collapse: collapse; background: rgba(0,0,0,0.3); border-radius: 8px; overflow: hidden;">
+                            <thead>
+                                <tr style="background: rgba(102, 126, 234, 0.3);">
+                                    <th style="padding: 12px; text-align: left; color: white; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.2);">#</th>
+                                    <th style="padding: 12px; text-align: left; color: white; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.2);">Card Number</th>
+                                    <th style="padding: 12px; text-align: left; color: white; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.2);">Expiry</th>
+                                    <th style="padding: 12px; text-align: left; color: white; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.2);">CVV</th>
+                                    <th style="padding: 12px; text-align: left; color: white; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.2);">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsTableBody">
+                                <!-- Cards will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Raw Output -->
+                    <div style="margin-top: 20px;">
+                        <h5 style="margin-bottom: 10px; color: #667eea;">
+                            <i class="fas fa-code"></i> Raw Output
+                        </h5>
+                        <div id="generatedCards" style="font-family: 'Courier New', monospace; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; color: #00ff00;"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -270,6 +321,7 @@
         // Global variables
         let generatedCards = [];
         let currentYear = new Date().getFullYear();
+        let cardData = []; // Store card objects for table display
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
@@ -379,6 +431,7 @@
 
             // Clear previous results
             generatedCards = [];
+            cardData = [];
             
             // Handle CSV format - add header first
             if (format === 'csv') {
@@ -443,6 +496,17 @@
 
                 console.log('Card data:', cardData);
                 generatedCards.push(cardData);
+                
+                // Store card object for table display
+                if (format !== 'json') {
+                    cardData.push({
+                        number: pan,
+                        month: month,
+                        year: year,
+                        cvv: cvv,
+                        formatted: cardData
+                    });
+                }
             }
 
             // Handle JSON format specially
@@ -463,18 +527,43 @@
             console.log('Displaying results...');
             const resultsSection = document.getElementById('resultsSection');
             const generatedCardsDiv = document.getElementById('generatedCards');
+            const resultsTableBody = document.getElementById('resultsTableBody');
             
-            if (!resultsSection || !generatedCardsDiv) {
+            if (!resultsSection || !generatedCardsDiv || !resultsTableBody) {
                 console.error('Results elements not found!');
                 return;
             }
             
             resultsSection.style.display = 'block';
             
+            // Display raw output
             const displayText = generatedCards.join('\n');
             console.log('Display text:', displayText);
-            
             generatedCardsDiv.innerHTML = displayText;
+            
+            // Display table
+            const format = document.getElementById('outputFormat').value;
+            if (format !== 'json' && cardData.length > 0) {
+                resultsTableBody.innerHTML = '';
+                cardData.forEach((card, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td class="card-number">${card.number}</td>
+                        <td class="expiry">${card.month}/${card.year}</td>
+                        <td class="cvv">${card.cvv}</td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="copySingleCard('${card.formatted}')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </td>
+                    `;
+                    resultsTableBody.appendChild(row);
+                });
+            } else {
+                resultsTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: rgba(255,255,255,0.7);">JSON format selected - view raw output below</td></tr>';
+            }
+            
             console.log('Results displayed successfully');
         }
 
@@ -529,11 +618,22 @@
             showNotification('Cards downloaded successfully', 'success');
         }
 
+        // Copy single card
+        function copySingleCard(cardText) {
+            navigator.clipboard.writeText(cardText).then(() => {
+                showNotification('Card copied to clipboard', 'success');
+            }).catch(() => {
+                showNotification('Failed to copy card', 'error');
+            });
+        }
+
         // Clear results
         function clearResults() {
             generatedCards = [];
+            cardData = [];
             document.getElementById('resultsSection').style.display = 'none';
             document.getElementById('generatedCards').innerHTML = '';
+            document.getElementById('resultsTableBody').innerHTML = '';
             showNotification('Results cleared', 'info');
         }
 
@@ -541,28 +641,43 @@
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
-            notification.textContent = message;
             
+            // Create icon based on type
+            let icon = 'fas fa-info-circle';
             switch(type) {
                 case 'success':
+                    icon = 'fas fa-check-circle';
                     notification.style.backgroundColor = '#28a745';
                     break;
                 case 'error':
+                    icon = 'fas fa-exclamation-circle';
                     notification.style.backgroundColor = '#dc3545';
                     break;
                 case 'warning':
+                    icon = 'fas fa-exclamation-triangle';
                     notification.style.backgroundColor = '#ffc107';
                     notification.style.color = '#333';
                     break;
                 default:
+                    icon = 'fas fa-info-circle';
                     notification.style.backgroundColor = '#17a2b8';
             }
             
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="${icon}" style="font-size: 16px;"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
             document.body.appendChild(notification);
             
+            // Auto remove after 4 seconds
             setTimeout(() => {
-                notification.remove();
-            }, 3000);
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 4000);
         }
     </script>
 </body>
