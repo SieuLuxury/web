@@ -77,71 +77,72 @@
             font-size: 12px;
             color: rgba(255, 255, 255, 0.7);
         }
-        #resultsSection {
+        .results-section {
             background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 20px;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         #generatedCards {
             font-family: 'Courier New', monospace;
             background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            border-radius: 8px;
-            max-height: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 500px;
             overflow-y: auto;
             white-space: pre-wrap;
             color: #00ff00;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            min-height: 100px;
+            min-height: 150px;
+            font-size: 14px;
+            line-height: 1.6;
         }
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .results-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .results-stats {
+            background: rgba(102, 126, 234, 0.1);
             padding: 15px 20px;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
         }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
         }
-        .results-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(0,0,0,0.3);
-            border-radius: 8px;
-            overflow: hidden;
+        .stat-item {
+            text-align: center;
         }
-        .results-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: white;
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
         }
-        .results-table th {
-            padding: 12px;
-            text-align: left;
-            color: white;
-            font-weight: 600;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            background: rgba(102, 126, 234, 0.3);
-        }
-        .results-table tr:hover {
-            background: rgba(255,255,255,0.05);
-        }
-        .card-number {
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            color: #00ff00;
-        }
-        .expiry {
-            color: #ffd700;
-        }
-        .cvv {
-            color: #ff6b6b;
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
         }
         .fade-in {
             animation: fadeIn 0.5s ease-in;
@@ -291,14 +292,16 @@
                         Quick Test
                     </button>
                 </div>
+            </div>
 
-                <!-- Results Section -->
-                <div class="card" id="resultsSection" style="display: none;">
-                    <h4 style="margin-bottom: 20px; color: #667eea;">
-                        <i class="fas fa-list"></i> Generated Cards
-                    </h4>
-                    
-                    <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+            <!-- Results Section - Separated -->
+            <div class="results-section fade-in" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <div class="results-title">
+                        <i class="fas fa-list"></i>
+                        Generated Cards
+                    </div>
+                    <div class="results-actions">
                         <button class="btn btn-secondary" onclick="copyResults()">
                             <i class="fas fa-copy"></i>
                             Copy All
@@ -312,14 +315,36 @@
                             Clear
                         </button>
                     </div>
-                    
-                    <!-- Raw Output only -->
-                    <div>
-                        <h5 style="margin-bottom: 10px; color: #667eea;">
-                            <i class="fas fa-code"></i> Generated Cards
-                        </h5>
-                        <div id="generatedCards"></div>
+                </div>
+
+                <!-- Results Stats -->
+                <div class="results-stats">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalCards">0</div>
+                            <div class="stat-label">Total Cards</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="cardType">-</div>
+                            <div class="stat-label">Card Type</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="outputFormat">-</div>
+                            <div class="stat-label">Format</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="generationTime">-</div>
+                            <div class="stat-label">Generation Time</div>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Generated Cards Output -->
+                <div>
+                    <h5 style="margin-bottom: 15px; color: #667eea; font-size: 1.1rem;">
+                        <i class="fas fa-code"></i> Generated Cards Output
+                    </h5>
+                    <div id="generatedCards"></div>
                 </div>
             </div>
         </section>
@@ -348,10 +373,10 @@
                 updateCardInfo();
                 generateCards();
                 
-                showNotification('Quick test started with auto-detected cards', 'info');
+                toastManager.info('Quick Test', 'Quick test started with auto-detected cards');
             } catch (error) {
                 console.error('Quick test error:', error);
-                showNotification('Error in quick test: ' + error.message, 'error');
+                toastManager.error('Quick Test Error', 'Error in quick test: ' + error.message);
             }
         }
 
@@ -486,7 +511,7 @@
             
             const detectedCardType = detectCardType(randomBIN);
             updateCardInfo();
-            showNotification(`Sample ${detectedCardType.toUpperCase()} BIN loaded: ${randomBIN}`, 'info');
+            toastManager.info('Sample BIN Loaded', `Sample ${detectedCardType.toUpperCase()} BIN loaded: ${randomBIN}`);
         }
 
         // Update card info based on BIN input
@@ -507,6 +532,8 @@
 
         // Generate cards based on settings
         function generateCards() {
+            const startTime = performance.now();
+            
             try {
                 console.log('generateCards called');
                 
@@ -520,17 +547,17 @@
 
                 // Validation
                 if (!binNumber) {
-                    showNotification('Please enter a BIN number', 'error');
+                    toastManager.error('Validation Error', 'Please enter a BIN number');
                     return;
                 }
 
                 if (binNumber.length < 6 || binNumber.length > 8) {
-                    showNotification('BIN must be 6-8 digits', 'error');
+                    toastManager.error('Validation Error', 'BIN must be 6-8 digits');
                     return;
                 }
 
                 if (quantity < 1 || quantity > 1000) {
-                    showNotification('Quantity must be between 1 and 1000', 'error');
+                    toastManager.error('Validation Error', 'Quantity must be between 1 and 1000');
                     return;
                 }
 
@@ -615,29 +642,38 @@
                     generatedCards = [JSON.stringify(jsonArray, null, 2)];
                 }
                 
+                const endTime = performance.now();
+                const generationTime = ((endTime - startTime) / 1000).toFixed(2);
+                
                 console.log('Generated cards:', generatedCards.length);
                 
                 // Display results
-                displayResults();
-                showNotification(`Generated ${quantity} ${detectedCardType.toUpperCase()} cards successfully`, 'success');
+                displayResults(detectedCardType, format, generationTime);
+                toastManager.success('Cards Generated', `Successfully generated ${quantity} ${detectedCardType.toUpperCase()} cards`);
                 
             } catch (error) {
                 console.error('Generate cards error:', error);
-                showNotification('Error generating cards: ' + error.message, 'error');
+                toastManager.error('Generation Error', 'Error generating cards: ' + error.message);
             }
         }
 
         // Display generated results
-        function displayResults() {
+        function displayResults(cardType, format, generationTime) {
             const resultsSection = document.getElementById('resultsSection');
             const generatedCardsDiv = document.getElementById('generatedCards');
             
             if (!resultsSection || !generatedCardsDiv) {
-                showNotification('Error: Results elements not found', 'error');
+                toastManager.error('Display Error', 'Results elements not found');
                 return;
             }
             
             resultsSection.style.display = 'block';
+            
+            // Update stats
+            document.getElementById('totalCards').textContent = cardData.length;
+            document.getElementById('cardType').textContent = cardType.toUpperCase();
+            document.getElementById('outputFormat').textContent = format.toUpperCase();
+            document.getElementById('generationTime').textContent = generationTime + 's';
             
             // Display raw output only
             const displayText = generatedCards.join('\n');
@@ -647,22 +683,22 @@
         // Copy results to clipboard
         function copyResults() {
             if (generatedCards.length === 0) {
-                showNotification('No cards to copy', 'error');
+                toastManager.error('Copy Error', 'No cards to copy');
                 return;
             }
 
             const textToCopy = generatedCards.join('\n');
             navigator.clipboard.writeText(textToCopy).then(() => {
-                showNotification('Cards copied to clipboard', 'success');
+                toastManager.success('Copied', 'Cards copied to clipboard');
             }).catch(() => {
-                showNotification('Failed to copy to clipboard', 'error');
+                toastManager.error('Copy Error', 'Failed to copy to clipboard');
             });
         }
 
         // Download results as file
         function downloadResults() {
             if (generatedCards.length === 0) {
-                showNotification('No cards to download', 'error');
+                toastManager.error('Download Error', 'No cards to download');
                 return;
             }
 
@@ -691,15 +727,15 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            showNotification('Cards downloaded successfully', 'success');
+            toastManager.success('Downloaded', 'Cards downloaded successfully');
         }
 
         // Copy single card
         function copySingleCard(cardText) {
             navigator.clipboard.writeText(cardText).then(() => {
-                showNotification('Card copied to clipboard', 'success');
+                toastManager.success('Copied', 'Card copied to clipboard');
             }).catch(() => {
-                showNotification('Failed to copy card', 'error');
+                toastManager.error('Copy Error', 'Failed to copy card');
             });
         }
 
@@ -709,49 +745,14 @@
             cardData = [];
             document.getElementById('resultsSection').style.display = 'none';
             document.getElementById('generatedCards').textContent = '';
-            showNotification('Results cleared', 'info');
-        }
-
-        // Show notification
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
             
-            let icon = 'fas fa-info-circle';
-            switch(type) {
-                case 'success':
-                    icon = 'fas fa-check-circle';
-                    notification.style.backgroundColor = '#28a745';
-                    break;
-                case 'error':
-                    icon = 'fas fa-exclamation-circle';
-                    notification.style.backgroundColor = '#dc3545';
-                    break;
-                case 'warning':
-                    icon = 'fas fa-exclamation-triangle';
-                    notification.style.backgroundColor = '#ffc107';
-                    notification.style.color = '#333';
-                    break;
-                default:
-                    icon = 'fas fa-info-circle';
-                    notification.style.backgroundColor = '#17a2b8';
-            }
+            // Reset stats
+            document.getElementById('totalCards').textContent = '0';
+            document.getElementById('cardType').textContent = '-';
+            document.getElementById('outputFormat').textContent = '-';
+            document.getElementById('generationTime').textContent = '-';
             
-            notification.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="${icon}" style="font-size: 16px;"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Auto remove after 4 seconds
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
-                }
-            }, 4000);
+            toastManager.info('Cleared', 'Results cleared');
         }
     </script>
 </body>
