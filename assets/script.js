@@ -453,48 +453,7 @@ function lookup3DS() {
     toastManager.info('Coming Soon', '3DS lookup sẽ được triển khai ở đây');
 }
 
-function generateCards() {
-    const cardType = document.getElementById('cardType').value;
-    const count = parseInt(document.getElementById('cardCount').value);
-
-    toastManager.success('Generating Cards', `Generating ${count} ${cardType} cards`);
-
-    let cards = '';
-    const cardPrefixes = {
-        visa: '4532',
-        mastercard: '5555',
-        amex: '3782',
-        discover: '6011'
-    };
-
-    for (let i = 0; i < count; i++) {
-        let cardNumber = cardPrefixes[cardType] + Math.random().toString().substr(2, 12);
-        const exp = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0') + '|' + (2025 + Math.floor(Math.random() * 5));
-        const cvv = String(Math.floor(Math.random() * 900) + 100);
-        
-        cards += `${cardNumber}|${exp}|${cvv}\n`;
-    }
-
-    document.getElementById('generatedCards').innerHTML = `
-        <h4 style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px; font-size: 1.4rem; font-weight: 700;">
-            <i class="fas fa-random" style="background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
-            Đã tạo ${count} thẻ ${cardType.toUpperCase()}
-        </h4>
-        <div class="form-group">
-            <textarea class="form-control" rows="15" readonly style="font-family: 'Courier New', monospace; font-size: 14px;">${cards}</textarea>
-        </div>
-        <div style="display: flex; gap: 15px;">
-            <button class="btn btn-primary" onclick="copyToClipboard('${cards.replace(/\n/g, '\\n')}')">
-                <i class="fas fa-copy"></i>
-                Copy All
-            </button>
-            <button class="btn btn-secondary" onclick="downloadCards('${cards.replace(/\n/g, '\\n')}', '${cardType}')">
-                <i class="fas fa-download"></i>
-                Download
-            </button>
-        </div>
-    `;
-}
+// Removed duplicate generateCards function to prevent conflicts
 
 function clearResults() {
     document.querySelectorAll('[id$="Results"]').forEach(el => {
@@ -713,51 +672,7 @@ function start3DSCheck() {
     }, 2000);
 }
 
-function generateCards() {
-    const brand = document.getElementById('cardBrand').value;
-    const count = parseInt(document.getElementById('cardCount').value) || 10;
-    
-    toastManager.info('Generating Cards', `Generating ${count} ${brand} cards...`);
-    
-    const resultsDiv = document.getElementById('generatedResults');
-    let cards = [];
-    
-    for (let i = 0; i < count; i++) {
-        let cardNumber = '';
-        if (brand === 'visa') {
-            cardNumber = '4532' + Math.random().toString().slice(2, 14);
-        } else if (brand === 'mastercard') {
-            cardNumber = '5555' + Math.random().toString().slice(2, 14);
-        } else if (brand === 'amex') {
-            cardNumber = '3782' + Math.random().toString().slice(2, 13);
-        } else {
-            cardNumber = '6011' + Math.random().toString().slice(2, 14);
-        }
-        
-        const expMonth = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
-        const expYear = String(2025 + Math.floor(Math.random() * 5));
-        const cvv = String(Math.floor(Math.random() * 900) + 100);
-        
-        cards.push(`${cardNumber}|${expMonth}|${expYear}|${cvv}`);
-    }
-    
-    resultsDiv.innerHTML = `
-        <h4 style="margin-bottom: 20px; color: var(--success);">
-            <i class="fas fa-check-circle"></i>
-            Generated ${count} ${brand.toUpperCase()} Cards
-        </h4>
-        <div class="form-container">
-            <textarea class="form-control" rows="10" readonly>${cards.join('\n')}</textarea>
-            <div style="margin-top: 15px;">
-                <button class="btn btn-secondary" onclick="copyToClipboard('${cards.join('\\n')}')">
-                    <i class="fas fa-copy"></i> Copy All
-                </button>
-            </div>
-        </div>
-    `;
-    
-    toastManager.success('Cards Generated', `Successfully generated ${count} cards`);
-}
+
 
 function clearGenerated() {
     document.getElementById('generatedResults').innerHTML = '';

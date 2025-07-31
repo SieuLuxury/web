@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium CC Checker - BIN Lookup</title>
+    <title>Premium CC Checker - BIN Lookup & Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
 </head>
@@ -17,37 +17,478 @@
     <!-- Main Content (hidden until navigation loads) -->
     <main class="main-content" style="opacity: 0; visibility: hidden;" id="mainContent">
         <header class="page-header">
-            <h1>BIN Lookup</h1>
-            <p>Look up Bank Identification Number information</p>
+            <h1>BIN Lookup & Generator</h1>
+            <p>Look up BIN information and generate cards with custom parameters</p>
         </header>
 
         <section class="content-area">
             <div class="form-container fade-in">
                 <h3 style="margin-bottom: 30px; font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; gap: 15px;">
-                    <i class="fas fa-search" style="font-size: 2rem; background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
-                    BIN Lookup Tool
+                    <i class="fas fa-credit-card" style="font-size: 2rem; background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+                    BIN Lookup & Card Generator
                 </h3>
                 
-                <div class="form-group">
-                    <label for="binNumber">BIN Number (first 6-8 digits)</label>
-                    <input type="text" id="binNumber" class="form-control" placeholder="453212" maxlength="8">
+                <!-- BIN Input Section -->
+                <div class="card mb-4">
+                    <h4 style="margin-bottom: 20px; color: var(--primary);">
+                        <i class="fas fa-search"></i> BIN Information
+                    </h4>
+                    
+                    <div class="form-group">
+                        <label for="binNumber">BIN Number (first 6-8 digits)</label>
+                        <input type="text" id="binNumber" class="form-control" placeholder="453212" maxlength="8">
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="lookupBIN()">
+                            <i class="fas fa-search"></i>
+                            Lookup BIN
+                        </button>
+                        <button class="btn btn-secondary" onclick="loadSampleBIN()">
+                            <i class="fas fa-magic"></i>
+                            Try Sample
+                        </button>
+                    </div>
+                    
+                    <div id="binResults"></div>
                 </div>
-                
-                <div style="display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
-                    <button class="btn btn-primary" onclick="lookupBIN()">
-                        <i class="fas fa-search"></i>
-                        Lookup BIN
-                    </button>
-                    <button class="btn btn-secondary" onclick="loadSampleBIN()">
-                        <i class="fas fa-magic"></i>
-                        Try Sample
-                    </button>
+
+                <!-- Card Generation Section -->
+                <div class="card mb-4">
+                    <h4 style="margin-bottom: 20px; color: var(--primary);">
+                        <i class="fas fa-cogs"></i> Card Generation Settings
+                    </h4>
+                    
+                    <div class="grid grid-2" style="gap: 20px;">
+                        <!-- Format Selection -->
+                        <div class="form-group">
+                            <label for="cardFormat">Card Format</label>
+                            <select id="cardFormat" class="form-control">
+                                <option value="full">Full Card (BIN + PAN + EXP + CVV)</option>
+                                <option value="bin-pan">BIN + PAN Only</option>
+                                <option value="pan-exp">PAN + EXP Only</option>
+                                <option value="custom">Custom Format</option>
+                            </select>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" id="quantity" class="form-control" placeholder="10" min="1" max="1000" value="10">
+                        </div>
+                    </div>
+
+                    <!-- Date Settings -->
+                    <div class="grid grid-2" style="gap: 20px; margin-top: 20px;">
+                        <div class="form-group">
+                            <label for="dateType">Expiry Date Type</label>
+                            <select id="dateType" class="form-control" onchange="toggleDateInput()">
+                                <option value="random">Random Date</option>
+                                <option value="custom">Custom Date</option>
+                                <option value="range">Date Range</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="customDateGroup" style="display: none;">
+                            <label for="customDate">Custom Expiry Date</label>
+                            <input type="month" id="customDate" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- Date Range (hidden by default) -->
+                    <div class="grid grid-2" style="gap: 20px; margin-top: 20px;" id="dateRangeGroup" style="display: none;">
+                        <div class="form-group">
+                            <label for="startDate">Start Date</label>
+                            <input type="month" id="startDate" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="endDate">End Date</label>
+                            <input type="month" id="endDate" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- CVV Settings -->
+                    <div class="grid grid-2" style="gap: 20px; margin-top: 20px;">
+                        <div class="form-group">
+                            <label for="cvvType">CVV Type</label>
+                            <select id="cvvType" class="form-control" onchange="toggleCVVInput()">
+                                <option value="random">Random CVV</option>
+                                <option value="custom">Custom CVV</option>
+                                <option value="range">CVV Range</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="customCVVGroup" style="display: none;">
+                            <label for="customCVV">Custom CVV</label>
+                            <input type="text" id="customCVV" class="form-control" placeholder="123" maxlength="4">
+                        </div>
+                    </div>
+
+                    <!-- CVV Range (hidden by default) -->
+                    <div class="grid grid-2" style="gap: 20px; margin-top: 20px;" id="cvvRangeGroup" style="display: none;">
+                        <div class="form-group">
+                            <label for="startCVV">Start CVV</label>
+                            <input type="number" id="startCVV" class="form-control" placeholder="100" min="100" max="9999">
+                        </div>
+                        <div class="form-group">
+                            <label for="endCVV">End CVV</label>
+                            <input type="number" id="endCVV" class="form-control" placeholder="999" min="100" max="9999">
+                        </div>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <div style="display: flex; gap: 15px; margin-top: 30px; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="generateCards()">
+                            <i class="fas fa-magic"></i>
+                            Generate Cards
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearResults()">
+                            <i class="fas fa-trash"></i>
+                            Clear Results
+                        </button>
+                    </div>
                 </div>
-                
-                <div id="binResults"></div>
+
+                <!-- Results Section -->
+                <div class="card" id="resultsSection" style="display: none;">
+                    <h4 style="margin-bottom: 20px; color: var(--primary);">
+                        <i class="fas fa-list"></i> Generated Cards
+                    </h4>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <button class="btn btn-secondary" onclick="copyResults()">
+                            <i class="fas fa-copy"></i>
+                            Copy All
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadResults()">
+                            <i class="fas fa-download"></i>
+                            Download
+                        </button>
+                    </div>
+                    
+                    <div id="generatedCards" style="font-family: 'Courier New', monospace; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px; max-height: 400px; overflow-y: auto;"></div>
+                </div>
             </div>
         </section>
     </main>
 
+    <script>
+        // Global variables
+        let binInfo = null;
+        let generatedCards = [];
+
+        // Toggle date input based on selection
+        function toggleDateInput() {
+            const dateType = document.getElementById('dateType').value;
+            const customDateGroup = document.getElementById('customDateGroup');
+            const dateRangeGroup = document.getElementById('dateRangeGroup');
+
+            customDateGroup.style.display = 'none';
+            dateRangeGroup.style.display = 'none';
+
+            if (dateType === 'custom') {
+                customDateGroup.style.display = 'block';
+            } else if (dateType === 'range') {
+                dateRangeGroup.style.display = 'block';
+            }
+        }
+
+        // Toggle CVV input based on selection
+        function toggleCVVInput() {
+            const cvvType = document.getElementById('cvvType').value;
+            const customCVVGroup = document.getElementById('customCVVGroup');
+            const cvvRangeGroup = document.getElementById('cvvRangeGroup');
+
+            customCVVGroup.style.display = 'none';
+            cvvRangeGroup.style.display = 'none';
+
+            if (cvvType === 'custom') {
+                customCVVGroup.style.display = 'block';
+            } else if (cvvType === 'range') {
+                cvvRangeGroup.style.display = 'block';
+            }
+        }
+
+        // Lookup BIN information
+        function lookupBIN() {
+            const binNumber = document.getElementById('binNumber').value.trim();
+            const resultsDiv = document.getElementById('binResults');
+
+            if (!binNumber) {
+                showNotification('Please enter a BIN number', 'error');
+                return;
+            }
+
+            if (binNumber.length < 6 || binNumber.length > 8) {
+                showNotification('BIN must be 6-8 digits', 'error');
+                return;
+            }
+
+            // Simulate BIN lookup (replace with actual API call)
+            resultsDiv.innerHTML = `
+                <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid var(--primary);">
+                    <h5 style="margin-bottom: 10px; color: var(--primary);">
+                        <i class="fas fa-info-circle"></i> BIN Information
+                    </h5>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                        <div><strong>BIN:</strong> ${binNumber}</div>
+                        <div><strong>Bank:</strong> Sample Bank</div>
+                        <div><strong>Type:</strong> Credit Card</div>
+                        <div><strong>Level:</strong> Standard</div>
+                        <div><strong>Country:</strong> United States</div>
+                        <div><strong>Brand:</strong> Visa</div>
+                    </div>
+                </div>
+            `;
+
+            binInfo = {
+                bin: binNumber,
+                bank: 'Sample Bank',
+                type: 'Credit Card',
+                level: 'Standard',
+                country: 'United States',
+                brand: 'Visa'
+            };
+
+            showNotification('BIN lookup completed successfully', 'success');
+        }
+
+        // Load sample BIN
+        function loadSampleBIN() {
+            const sampleBINs = ['453212', '541275', '400555', '510510', '411111'];
+            const randomBIN = sampleBINs[Math.floor(Math.random() * sampleBINs.length)];
+            document.getElementById('binNumber').value = randomBIN;
+            lookupBIN();
+        }
+
+        // Generate random PAN (Personal Account Number)
+        function generatePAN(bin, length = 16) {
+            const remainingLength = length - bin.length;
+            let pan = bin;
+            
+            // Generate random digits for remaining positions
+            for (let i = 0; i < remainingLength - 1; i++) {
+                pan += Math.floor(Math.random() * 10);
+            }
+            
+            // Add check digit using Luhn algorithm
+            pan += generateCheckDigit(pan);
+            
+            return pan;
+        }
+
+        // Generate check digit using Luhn algorithm
+        function generateCheckDigit(number) {
+            let sum = 0;
+            let isEven = false;
+            
+            for (let i = number.length - 1; i >= 0; i--) {
+                let digit = parseInt(number[i]);
+                
+                if (isEven) {
+                    digit *= 2;
+                    if (digit > 9) {
+                        digit -= 9;
+                    }
+                }
+                
+                sum += digit;
+                isEven = !isEven;
+            }
+            
+            return (10 - (sum % 10)) % 10;
+        }
+
+        // Generate random expiry date
+        function generateRandomDate() {
+            const currentYear = new Date().getFullYear();
+            const randomYear = currentYear + Math.floor(Math.random() * 10) + 1;
+            const randomMonth = Math.floor(Math.random() * 12) + 1;
+            return `${randomYear}-${randomMonth.toString().padStart(2, '0')}`;
+        }
+
+        // Generate random CVV
+        function generateRandomCVV() {
+            return Math.floor(Math.random() * 900) + 100; // 100-999
+        }
+
+        // Generate cards based on settings
+        function generateCards() {
+            const binNumber = document.getElementById('binNumber').value.trim();
+            const format = document.getElementById('cardFormat').value;
+            const quantity = parseInt(document.getElementById('quantity').value) || 10;
+            const dateType = document.getElementById('dateType').value;
+            const cvvType = document.getElementById('cvvType').value;
+
+            if (!binNumber) {
+                showNotification('Please enter a BIN number first', 'error');
+                return;
+            }
+
+            if (quantity < 1 || quantity > 1000) {
+                showNotification('Quantity must be between 1 and 1000', 'error');
+                return;
+            }
+
+            generatedCards = [];
+
+            for (let i = 0; i < quantity; i++) {
+                const pan = generatePAN(binNumber);
+                
+                // Generate expiry date
+                let expiryDate;
+                if (dateType === 'custom') {
+                    const customDate = document.getElementById('customDate').value;
+                    expiryDate = customDate;
+                } else if (dateType === 'range') {
+                    const startDate = document.getElementById('startDate').value;
+                    const endDate = document.getElementById('endDate').value;
+                    // Simple random date between range
+                    expiryDate = startDate; // Simplified for demo
+                } else {
+                    expiryDate = generateRandomDate();
+                }
+
+                // Generate CVV
+                let cvv;
+                if (cvvType === 'custom') {
+                    cvv = document.getElementById('customCVV').value;
+                } else if (cvvType === 'range') {
+                    const startCVV = parseInt(document.getElementById('startCVV').value) || 100;
+                    const endCVV = parseInt(document.getElementById('endCVV').value) || 999;
+                    cvv = Math.floor(Math.random() * (endCVV - startCVV + 1)) + startCVV;
+                } else {
+                    cvv = generateRandomCVV();
+                }
+
+                // Format card based on selection
+                let cardString;
+                switch (format) {
+                    case 'full':
+                        cardString = `${pan}|${expiryDate}|${cvv}`;
+                        break;
+                    case 'bin-pan':
+                        cardString = `${pan}`;
+                        break;
+                    case 'pan-exp':
+                        cardString = `${pan}|${expiryDate}`;
+                        break;
+                    case 'custom':
+                        cardString = `${pan}|${expiryDate}|${cvv}|${binInfo?.bank || 'Unknown'}`;
+                        break;
+                    default:
+                        cardString = `${pan}|${expiryDate}|${cvv}`;
+                }
+
+                generatedCards.push(cardString);
+            }
+
+            displayResults();
+            showNotification(`Generated ${quantity} cards successfully`, 'success');
+        }
+
+        // Display generated results
+        function displayResults() {
+            const resultsSection = document.getElementById('resultsSection');
+            const generatedCardsDiv = document.getElementById('generatedCards');
+            
+            resultsSection.style.display = 'block';
+            generatedCardsDiv.innerHTML = generatedCards.join('\n');
+        }
+
+        // Copy results to clipboard
+        function copyResults() {
+            if (generatedCards.length === 0) {
+                showNotification('No cards to copy', 'error');
+                return;
+            }
+
+            const textToCopy = generatedCards.join('\n');
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showNotification('Cards copied to clipboard', 'success');
+            }).catch(() => {
+                showNotification('Failed to copy to clipboard', 'error');
+            });
+        }
+
+        // Download results as file
+        function downloadResults() {
+            if (generatedCards.length === 0) {
+                showNotification('No cards to download', 'error');
+                return;
+            }
+
+            const textToDownload = generatedCards.join('\n');
+            const blob = new Blob([textToDownload], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `generated_cards_${new Date().getTime()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Cards downloaded successfully', 'success');
+        }
+
+        // Clear results
+        function clearResults() {
+            generatedCards = [];
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('generatedCards').innerHTML = '';
+            showNotification('Results cleared', 'info');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            switch(type) {
+                case 'success':
+                    notification.style.backgroundColor = '#28a745';
+                    break;
+                case 'error':
+                    notification.style.backgroundColor = '#dc3545';
+                    break;
+                case 'warning':
+                    notification.style.backgroundColor = '#ffc107';
+                    notification.style.color = '#333';
+                    break;
+                default:
+                    notification.style.backgroundColor = '#17a2b8';
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default dates
+            const currentDate = new Date();
+            const futureDate = new Date(currentDate.getFullYear() + 5, currentDate.getMonth());
+            
+            document.getElementById('startDate').value = currentDate.toISOString().slice(0, 7);
+            document.getElementById('endDate').value = futureDate.toISOString().slice(0, 7);
+        });
+    </script>
 </body>
 </html>
