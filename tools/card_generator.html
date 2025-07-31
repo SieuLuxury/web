@@ -149,119 +149,95 @@
                     Advanced Card Generator
                 </h3>
 
-                <!-- BIN Input -->
+                <!-- Main Form -->
                 <div class="card">
                     <h4 style="margin-bottom: 20px; color: #667eea;">
-                        <i class="fas fa-hashtag"></i> Card Configuration
-                    </h4>
-                    
-                    <div class="form-group">
-                        <label for="binNumber">BIN Number</label>
-                        <input type="text" id="binNumber" class="form-control" placeholder="453212" maxlength="8" oninput="updateCardInfo()">
-                        <small>Enter the first 6-8 digits of the card number. Card type will be auto-detected.</small>
-                    </div>
-                </div>
-
-                <!-- Expiry Date Settings -->
-                <div class="card">
-                    <h4 style="margin-bottom: 20px; color: #667eea;">
-                        <i class="fas fa-calendar"></i> Expiry Date Settings
+                        <i class="fas fa-credit-card"></i> Card Generator Settings
                     </h4>
                     
                     <div class="grid-2">
-                        <div class="form-group">
-                            <label for="monthType">Month Selection</label>
-                            <select id="monthType" class="form-control">
-                                <option value="random">Random</option>
-                                <option value="01">01</option>
-                                <option value="02">02</option>
-                                <option value="03">03</option>
-                                <option value="04">04</option>
-                                <option value="05">05</option>
-                                <option value="06">06</option>
-                                <option value="07">07</option>
-                                <option value="08">08</option>
-                                <option value="09">09</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                            </select>
+                        <!-- Left Column -->
+                        <div>
+                            <div class="form-group">
+                                <label for="binNumber">BIN Number</label>
+                                <input type="text" id="binNumber" class="form-control" placeholder="453212" maxlength="8" oninput="updateCardInfo()">
+                                <small>Enter 6-8 digits. Card type auto-detected.</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cvvInput">CVV (optional)</label>
+                                <input type="text" id="cvvInput" class="form-control" placeholder="000" maxlength="4">
+                                <small id="cvvInfo">Leave empty for random CVV</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" id="quantity" class="form-control" placeholder="10" min="1" max="1000" value="10">
+                                <small>Number of cards (1-1000)</small>
+                            </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="yearType">Year Selection</label>
-                            <select id="yearType" class="form-control">
-                                <option value="random">Random</option>
-                                <option value="25">2025</option>
-                                <option value="26">2026</option>
-                                <option value="27">2027</option>
-                                <option value="28">2028</option>
-                                <option value="29">2029</option>
-                                <option value="30">2030</option>
-                                <option value="31">2031</option>
-                                <option value="32">2032</option>
-                                <option value="33">2033</option>
-                            </select>
+                        
+                        <!-- Right Column -->
+                        <div>
+                            <div class="form-group">
+                                <label for="monthType">Month</label>
+                                <select id="monthType" class="form-control">
+                                    <option value="random">Random</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="yearType">Year</label>
+                                <select id="yearType" class="form-control">
+                                    <option value="random">Random</option>
+                                    <option value="25">2025</option>
+                                    <option value="26">2026</option>
+                                    <option value="27">2027</option>
+                                    <option value="28">2028</option>
+                                    <option value="29">2029</option>
+                                    <option value="30">2030</option>
+                                    <option value="31">2031</option>
+                                    <option value="32">2032</option>
+                                    <option value="33">2033</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="outputFormat">Format</label>
+                                <select id="outputFormat" class="form-control">
+                                    <option value="pipe">Pipe (cc|mm|yy|cvv)</option>
+                                    <option value="csv">CSV</option>
+                                    <option value="json">JSON</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- CVV Settings -->
-                <div class="card">
-                    <h4 style="margin-bottom: 20px; color: #667eea;">
-                        <i class="fas fa-shield-alt"></i> CVV Settings
-                    </h4>
                     
-                    <div class="form-group">
-                        <label for="cvvInput">CVV (leave empty for random)</label>
-                        <input type="text" id="cvvInput" class="form-control" placeholder="000 (optional)" maxlength="4">
-                        <small id="cvvInfo">Leave empty to generate random CVV</small>
-                    </div>
-                </div>
-
-                <!-- Output Format -->
-                <div class="card">
-                    <h4 style="margin-bottom: 20px; color: #667eea;">
-                        <i class="fas fa-file-code"></i> Output Format
-                    </h4>
-                    
-                    <div class="form-group">
-                        <label for="outputFormat">Format Type</label>
-                        <select id="outputFormat" class="form-control">
-                            <option value="pipe">Pipe Format (cc|mm|yy|cvv)</option>
-                            <option value="csv">CSV Format</option>
-                            <option value="json">JSON Format</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Quantity -->
-                <div class="card">
-                    <h4 style="margin-bottom: 20px; color: #667eea;">
-                        <i class="fas fa-list-ol"></i> Quantity
-                    </h4>
-                    
-                    <div class="form-group">
-                        <label for="quantity">Number of Cards</label>
-                        <input type="number" id="quantity" class="form-control" placeholder="10" min="1" max="1000" value="10">
-                        <small>Enter the number of cards to generate (1-1000)</small>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="card">
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <!-- Action Buttons -->
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
                         <button class="btn btn-primary" onclick="generateCards()">
                             <i class="fas fa-magic"></i>
                             Generate Cards
                         </button>
                         <button class="btn btn-secondary" onclick="clearResults()">
                             <i class="fas fa-trash"></i>
-                            Clear Results
+                            Clear
                         </button>
                         <button class="btn btn-secondary" onclick="loadSampleBIN()">
-                            <i class="fas fa-magic"></i>
-                            Try Sample BIN
+                            <i class="fas fa-dice"></i>
+                            Sample BIN
                         </button>
                         <button class="btn btn-secondary" onclick="quickTest()">
                             <i class="fas fa-play"></i>
