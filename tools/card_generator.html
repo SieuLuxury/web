@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premium CC Checker - Card Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/web/style.css">
+    <link rel="stylesheet" href="../style.css">
     <style>
         .grid-2 {
             display: grid;
@@ -170,12 +170,6 @@
     </style>
 </head>
 <body>
-    <!-- Load Navigation -->
-    <script src="/web/assets/navigation-loader.js"></script>
-    <script>
-        loadNavigation('card-generator', true);
-    </script>
-
     <!-- Main Content -->
     <main class="main-content" style="opacity: 1; visibility: visible;" id="mainContent">
         <header class="page-header">
@@ -323,6 +317,10 @@
                             <i class="fas fa-play"></i>
                             Quick Test
                         </button>
+                        <button class="btn btn-secondary" onclick="simpleTest()">
+                            <i class="fas fa-rocket"></i>
+                            Simple Test
+                        </button>
                     </div>
                 </div>
 
@@ -385,9 +383,10 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded');
             updateBINPlaceholder();
             
-            // Add test button to check if JavaScript is working
+            // Add test button
             const testButton = document.createElement('button');
             testButton.innerHTML = '<i class="fas fa-bug"></i> Test JS';
             testButton.className = 'btn btn-secondary';
@@ -400,6 +399,8 @@
                 showNotification('JavaScript is working!', 'success');
             };
             document.body.appendChild(testButton);
+            
+            console.log('Test button added');
         });
 
         // Quick test function
@@ -424,6 +425,45 @@
             } catch (error) {
                 alert('Error in quickTest: ' + error.message);
                 console.error('Quick test error:', error);
+            }
+        }
+
+        // Simple test function - just create cards without complex logic
+        function simpleTest() {
+            try {
+                console.log('Simple test started');
+                
+                // Clear previous results
+                generatedCards = [];
+                cardData = [];
+                
+                // Create simple cards
+                for (let i = 0; i < 3; i++) {
+                    const cardNumber = '453212345678901' + i;
+                    const month = '12';
+                    const year = '25';
+                    const cvv = '123';
+                    const formattedCard = `${cardNumber}|${month}|${year}|${cvv}`;
+                    
+                    generatedCards.push(formattedCard);
+                    cardData.push({
+                        number: cardNumber,
+                        month: month,
+                        year: year,
+                        cvv: cvv,
+                        formatted: formattedCard
+                    });
+                }
+                
+                console.log('Cards created:', generatedCards);
+                
+                // Display results
+                displayResults();
+                showNotification('Simple test completed - 3 cards generated', 'success');
+                
+            } catch (error) {
+                alert('Error in simpleTest: ' + error.message);
+                console.error('Simple test error:', error);
             }
         }
 
