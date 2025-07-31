@@ -148,44 +148,36 @@
                     <div class="grid-2">
                         <div class="form-group">
                             <label for="monthType">Month Selection</label>
-                            <select id="monthType" class="form-control" onchange="toggleMonthInput()">
-                                <option value="random">Random Month</option>
-                                <option value="custom">Custom Month</option>
+                            <select id="monthType" class="form-control">
+                                <option value="random">Random</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
                             </select>
                         </div>
 
-                        <div class="form-group" id="customMonthGroup" style="display: none;">
-                            <label for="customMonth">Custom Month</label>
-                            <select id="customMonth" class="form-control">
-                                <option value="01">01 - January</option>
-                                <option value="02">02 - February</option>
-                                <option value="03">03 - March</option>
-                                <option value="04">04 - April</option>
-                                <option value="05">05 - May</option>
-                                <option value="06">06 - June</option>
-                                <option value="07">07 - July</option>
-                                <option value="08">08 - August</option>
-                                <option value="09">09 - September</option>
-                                <option value="10">10 - October</option>
-                                <option value="11">11 - November</option>
-                                <option value="12">12 - December</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grid-2" style="margin-top: 20px;">
                         <div class="form-group">
                             <label for="yearType">Year Selection</label>
-                            <select id="yearType" class="form-control" onchange="toggleYearInput()">
-                                <option value="random">Random Year (Current + 8)</option>
-                                <option value="custom">Custom Year</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group" id="customYearGroup" style="display: none;">
-                            <label for="customYear">Custom Year</label>
-                            <select id="customYear" class="form-control">
-                                <!-- Will be populated with current year to current + 8 -->
+                            <select id="yearType" class="form-control">
+                                <option value="random">Random</option>
+                                <option value="25">2025</option>
+                                <option value="26">2026</option>
+                                <option value="27">2027</option>
+                                <option value="28">2028</option>
+                                <option value="29">2029</option>
+                                <option value="30">2030</option>
+                                <option value="31">2031</option>
+                                <option value="32">2032</option>
+                                <option value="33">2033</option>
                             </select>
                         </div>
                     </div>
@@ -199,8 +191,8 @@
                     
                     <div class="form-group">
                         <label for="cvvInput">CVV (leave empty for random)</label>
-                        <input type="text" id="cvvInput" class="form-control" placeholder="123 (optional)" maxlength="4">
-                        <small>Leave empty to generate random CVV (100-999)</small>
+                        <input type="text" id="cvvInput" class="form-control" placeholder="000 (optional)" maxlength="3">
+                        <small>Leave empty to generate random CVV (000-999)</small>
                     </div>
                 </div>
 
@@ -212,16 +204,11 @@
                     
                     <div class="form-group">
                         <label for="outputFormat">Format Type</label>
-                        <select id="outputFormat" class="form-control" onchange="toggleFormatPreview()">
+                        <select id="outputFormat" class="form-control">
                             <option value="pipe">Pipe Format (cc|mm|yy|cvv)</option>
                             <option value="csv">CSV Format</option>
                             <option value="json">JSON Format</option>
                         </select>
-                    </div>
-
-                    <div id="formatPreview" style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-top: 15px; font-family: 'Courier New', monospace; font-size: 0.9rem; color: #00ff00;">
-                        <strong>Preview:</strong><br>
-                        <span id="previewText">4532123456789012|12|25|123</span>
                     </div>
                 </div>
 
@@ -287,65 +274,8 @@
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Page loaded, initializing...');
-            populateYearOptions();
-            toggleFormatPreview();
             console.log('Initialization complete');
         });
-
-        // Populate year options (current year to current + 8)
-        function populateYearOptions() {
-            const yearSelect = document.getElementById('customYear');
-            yearSelect.innerHTML = '';
-            
-            for (let year = currentYear; year <= currentYear + 8; year++) {
-                const option = document.createElement('option');
-                option.value = year.toString().slice(-2); // Get last 2 digits
-                option.textContent = `${year.toString().slice(-2)} - ${year}`;
-                yearSelect.appendChild(option);
-            }
-        }
-
-        // Toggle month input based on selection
-        function toggleMonthInput() {
-            const monthType = document.getElementById('monthType').value;
-            const customMonthGroup = document.getElementById('customMonthGroup');
-            
-            if (monthType === 'custom') {
-                customMonthGroup.style.display = 'block';
-            } else {
-                customMonthGroup.style.display = 'none';
-            }
-        }
-
-        // Toggle year input based on selection
-        function toggleYearInput() {
-            const yearType = document.getElementById('yearType').value;
-            const customYearGroup = document.getElementById('customYearGroup');
-            
-            if (yearType === 'custom') {
-                customYearGroup.style.display = 'block';
-            } else {
-                customYearGroup.style.display = 'none';
-            }
-        }
-
-        // Toggle format preview
-        function toggleFormatPreview() {
-            const format = document.getElementById('outputFormat').value;
-            const previewText = document.getElementById('previewText');
-            
-            switch(format) {
-                case 'pipe':
-                    previewText.textContent = '4532123456789012|12|25|123';
-                    break;
-                case 'csv':
-                    previewText.textContent = 'card_number,expiration_month,expiration_year,cvv\n4532123456789012,12,25,123';
-                    break;
-                case 'json':
-                    previewText.textContent = '[{"card_number":"4532123456789012","expiration_month":"12","expiration_year":"25","cvv":"123"}]';
-                    break;
-            }
-        }
 
         // Generate random PAN (Personal Account Number)
         function generatePAN(bin, length = 16) {
@@ -392,12 +322,13 @@
 
         // Generate random year
         function generateRandomYear() {
-            return (currentYear + Math.floor(Math.random() * 8) + 1).toString().slice(-2);
+            const years = ['25', '26', '27', '28', '29', '30', '31', '32', '33'];
+            return years[Math.floor(Math.random() * years.length)];
         }
 
         // Generate random CVV
         function generateRandomCVV() {
-            return Math.floor(Math.random() * 900) + 100; // 100-999
+            return Math.floor(Math.random() * 1000).toString().padStart(3, '0'); // 000-999
         }
 
         // Load sample BIN
@@ -443,18 +374,18 @@
                 
                 // Generate month
                 let month;
-                if (monthType === 'custom') {
-                    month = document.getElementById('customMonth').value;
-                } else {
+                if (monthType === 'random') {
                     month = generateRandomMonth();
+                } else {
+                    month = monthType;
                 }
 
                 // Generate year
                 let year;
-                if (yearType === 'custom') {
-                    year = document.getElementById('customYear').value;
-                } else {
+                if (yearType === 'random') {
                     year = generateRandomYear();
+                } else {
+                    year = yearType;
                 }
 
                 // Generate CVV
