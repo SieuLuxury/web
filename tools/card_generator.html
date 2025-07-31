@@ -5,14 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premium CC Checker - Card Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../style.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
         .grid-2 {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
         }
+        
         .mb-4 { margin-bottom: 1.5rem; }
+        
         .card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -21,9 +56,11 @@
             padding: 20px;
             margin-bottom: 20px;
         }
+        
         .form-group {
             margin-bottom: 15px;
         }
+        
         .form-control {
             width: 100%;
             padding: 12px 15px;
@@ -33,11 +70,13 @@
             color: white;
             font-size: 14px;
         }
+        
         .form-control:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.25);
         }
+        
         .btn {
             padding: 12px 24px;
             border: none;
@@ -50,38 +89,46 @@
             align-items: center;
             gap: 8px;
         }
+        
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
+        
         .btn-secondary {
             background: rgba(255, 255, 255, 0.1);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
+        
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
+        
         .btn-sm {
             padding: 6px 12px;
             font-size: 12px;
         }
+        
         label {
             display: block;
             margin-bottom: 8px;
             color: white;
             font-weight: 600;
         }
+        
         small {
             font-size: 12px;
             color: rgba(255, 255, 255, 0.7);
         }
+        
         #resultsSection {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             padding: 20px;
         }
+        
         #generatedCards {
             font-family: 'Courier New', monospace;
             background: rgba(0, 0, 0, 0.5);
@@ -91,7 +138,10 @@
             overflow-y: auto;
             white-space: pre-wrap;
             color: #00ff00;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 100px;
         }
+        
         .notification {
             position: fixed;
             top: 20px;
@@ -103,40 +153,65 @@
             z-index: 1000;
             animation: slideIn 0.3s ease;
         }
+        
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
         .results-table td {
             padding: 10px 12px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             color: white;
         }
+        
+        .results-table th {
+            padding: 12px;
+            text-align: left;
+            color: white;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            background: rgba(102, 126, 234, 0.3);
+        }
+        
         .results-table tr:hover {
             background: rgba(255,255,255,0.05);
         }
+        
         .card-number {
             font-family: 'Courier New', monospace;
             font-weight: bold;
             color: #00ff00;
         }
+        
         .expiry {
             color: #ffd700;
         }
+        
         .cvv {
             color: #ff6b6b;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <!-- Load Navigation -->
-    <script src="../assets/navigation-loader.js"></script>
-    <script>
-        loadNavigation('card-generator', true);
-    </script>
-
-    <!-- Main Content (hidden until navigation loads) -->
-    <main class="main-content" style="opacity: 0; visibility: hidden;" id="mainContent">
+    <main class="main-content">
         <header class="page-header">
             <h1>Card Generator</h1>
             <p>Generate valid test credit card numbers with custom parameters</p>
@@ -145,7 +220,7 @@
         <section class="content-area">
             <div class="form-container fade-in">
                 <h3 style="margin-bottom: 30px; font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; gap: 15px;">
-                    <i class="fas fa-credit-card" style="font-size: 2rem; background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+                    <i class="fas fa-credit-card" style="font-size: 2rem; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
                     Advanced Card Generator
                 </h3>
 
@@ -289,30 +364,14 @@
                         </button>
                     </div>
                     
-                    <!-- Results Table -->
-                    <div class="results-table-container" style="margin-bottom: 20px;">
-                        <table class="results-table" id="resultsTable" style="width: 100%; border-collapse: collapse; background: rgba(0,0,0,0.3); border-radius: 8px; overflow: hidden;">
-                            <thead>
-                                <tr style="background: rgba(102, 126, 234, 0.3);">
-                                    <th style="padding: 12px; text-align: left; color: white; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.2);">#</th>
-                                    <th style="padding: 12px; text-align: left; color: white; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.2);">Card Number</th>
-                                    <th style="padding: 12px; text-align: left; color: white; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.2);">Expiry</th>
-                                    <th style="padding: 12px; text-align: left; color: white; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.2);">CVV</th>
-                                    <th style="padding: 12px; text-align: left; color: white; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.2);">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="resultsTableBody">
-                                <!-- Cards will be inserted here -->
-                            </tbody>
-                        </table>
-                    </div>
+
                     
-                    <!-- Raw Output -->
-                    <div style="margin-top: 20px;">
+                    <!-- Raw Output only -->
+                    <div>
                         <h5 style="margin-bottom: 10px; color: #667eea;">
-                            <i class="fas fa-code"></i> Raw Output
+                            <i class="fas fa-code"></i> Generated Cards
                         </h5>
-                        <div id="generatedCards" style="font-family: 'Courier New', monospace; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; color: #00ff00;"></div>
+                        <div id="generatedCards"></div>
                     </div>
                 </div>
             </div>
@@ -322,8 +381,7 @@
     <script>
         // Global variables
         let generatedCards = [];
-        let currentYear = new Date().getFullYear();
-        let cardData = []; // Store card objects for table display
+        let cardData = [];
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
@@ -333,7 +391,6 @@
         // Quick test function
         function quickTest() {
             try {
-                // Set default values
                 document.getElementById('binNumber').value = '453212';
                 document.getElementById('monthType').value = 'random';
                 document.getElementById('yearType').value = 'random';
@@ -341,29 +398,26 @@
                 document.getElementById('outputFormat').value = 'pipe';
                 document.getElementById('quantity').value = '5';
                 
-                // Update UI
                 updateCardInfo();
-                
-                // Generate cards immediately
                 generateCards();
                 
                 showNotification('Quick test started with auto-detected cards', 'info');
             } catch (error) {
-                alert('Error in quickTest: ' + error.message);
                 console.error('Quick test error:', error);
+                showNotification('Error in quick test: ' + error.message, 'error');
             }
         }
-
-
 
         // Generate random PAN (Personal Account Number)
         function generatePAN(bin, cardType) {
             try {
                 const cardInfo = getCardInfo(cardType);
-                const remainingLength = cardInfo.length - bin.length;
                 let pan = bin;
                 
-                // Generate random digits for remaining positions
+                // Calculate remaining length needed
+                const remainingLength = cardInfo.length - bin.length;
+                
+                // Generate random digits for remaining positions (excluding check digit)
                 for (let i = 0; i < remainingLength - 1; i++) {
                     pan += Math.floor(Math.random() * 10);
                 }
@@ -374,8 +428,12 @@
                 return pan;
             } catch (error) {
                 console.error('Error in generatePAN:', error);
-                // Fallback: return a simple card number
-                return bin + '123456789012';
+                // Fallback
+                let fallback = bin;
+                while (fallback.length < 16) {
+                    fallback += Math.floor(Math.random() * 10);
+                }
+                return fallback.substring(0, 16);
             }
         }
 
@@ -414,62 +472,48 @@
 
         // Auto-detect card type from BIN
         function detectCardType(bin) {
-            if (!bin) return 'custom';
+            if (!bin) return 'visa';
             
             const binStr = bin.toString();
             
-            // American Express: 34, 37
             if (binStr.startsWith('34') || binStr.startsWith('37')) {
                 return 'amex';
             }
             
-            // JCB: 35
             if (binStr.startsWith('35')) {
                 return 'jcb';
             }
             
-            // Visa: 4
             if (binStr.startsWith('4')) {
                 return 'visa';
             }
             
-            // Mastercard: 51-55, 2221-2720
-            if (binStr.startsWith('5') || 
-                (parseInt(binStr) >= 2221 && parseInt(binStr) <= 2720)) {
+            if (binStr.startsWith('5') || (parseInt(binStr.substring(0, 4)) >= 2221 && parseInt(binStr.substring(0, 4)) <= 2720)) {
                 return 'mastercard';
             }
             
-            // Discover: 6011, 622126-622925, 644-649, 65
-            if (binStr.startsWith('6011') || 
-                binStr.startsWith('622') || 
-                binStr.startsWith('64') || 
-                binStr.startsWith('65')) {
+            if (binStr.startsWith('6011') || binStr.startsWith('622') || binStr.startsWith('64') || binStr.startsWith('65')) {
                 return 'discover';
             }
             
-            // Diners Club: 300-305, 36, 38-39
-            if (binStr.startsWith('30') || 
-                binStr.startsWith('36') || 
-                binStr.startsWith('38') || 
-                binStr.startsWith('39')) {
+            if (binStr.startsWith('30') || binStr.startsWith('36') || binStr.startsWith('38') || binStr.startsWith('39')) {
                 return 'diners';
             }
             
-            return 'custom';
+            return 'visa';
         }
         
         // Get card info based on type
         function getCardInfo(cardType) {
             const cardInfo = {
-                visa: { length: 16, cvvLength: 3, prefix: '4' },
-                mastercard: { length: 16, cvvLength: 3, prefix: '5' },
-                amex: { length: 15, cvvLength: 4, prefix: '3' },
-                discover: { length: 16, cvvLength: 3, prefix: '6' },
-                jcb: { length: 15, cvvLength: 3, prefix: '3' },
-                diners: { length: 14, cvvLength: 3, prefix: '3' },
-                custom: { length: 16, cvvLength: 3, prefix: '' }
+                visa: { length: 16, cvvLength: 3 },
+                mastercard: { length: 16, cvvLength: 3 },
+                amex: { length: 15, cvvLength: 4 },
+                discover: { length: 16, cvvLength: 3 },
+                jcb: { length: 15, cvvLength: 3 },
+                diners: { length: 16, cvvLength: 3 }
             };
-            return cardInfo[cardType] || cardInfo.visa;
+            return cardInfo[cardType] || { length: 16, cvvLength: 3 };
         }
 
         // Generate random CVV based on card type
@@ -493,7 +537,6 @@
             const randomBIN = sampleBINs[Math.floor(Math.random() * sampleBINs.length)];
             document.getElementById('binNumber').value = randomBIN;
             
-            // Auto-detect and show card type
             const detectedCardType = detectCardType(randomBIN);
             updateCardInfo();
             showNotification(`Sample ${detectedCardType.toUpperCase()} BIN loaded: ${randomBIN}`, 'info');
@@ -509,28 +552,13 @@
                 const detectedCardType = detectCardType(bin);
                 const cardInfo = getCardInfo(detectedCardType);
                 
-                // Update CVV info
-                const maxCVV = Math.pow(10, cardInfo.cvvLength) - 1;
-                const minCVV = '0'.repeat(cardInfo.cvvLength);
-                cvvInfo.textContent = `Detected: ${detectedCardType.toUpperCase()} (${cardInfo.length} digits, ${cardInfo.cvvLength} CVV). Leave empty to generate random CVV (${minCVV}-${maxCVV})`;
-                
-                // Update placeholder with sample BIN
-                const sampleBINs = {
-                    'visa': '453212',
-                    'mastercard': '541275',
-                    'amex': '371449',
-                    'discover': '601100',
-                    'jcb': '352800',
-                    'diners': '305693',
-                    'custom': 'Enter the first 6-8 digits of the card number'
-                };
-                binInput.placeholder = sampleBINs[detectedCardType] || 'Enter the first 6-8 digits of the card number';
+                cvvInfo.textContent = `Detected: ${detectedCardType.toUpperCase()} (${cardInfo.length} digits, ${cardInfo.cvvLength} CVV digits)`;
             } else {
                 cvvInfo.textContent = 'Enter BIN to auto-detect card type';
             }
         }
 
-                // Generate cards based on settings
+        // Generate cards based on settings
         function generateCards() {
             try {
                 console.log('generateCards called');
@@ -542,12 +570,6 @@
                 const cvvInput = document.getElementById('cvvInput').value.trim();
                 const format = document.getElementById('outputFormat').value;
                 const quantity = parseInt(document.getElementById('quantity').value) || 10;
-
-                // Auto-detect card type from BIN
-                const detectedCardType = detectCardType(binNumber);
-                console.log('Detected card type:', detectedCardType);
-
-                console.log('Inputs:', { detectedCardType, binNumber, monthType, yearType, cvvInput, format, quantity });
 
                 // Validation
                 if (!binNumber) {
@@ -565,7 +587,9 @@
                     return;
                 }
 
-                console.log('Validation passed');
+                // Auto-detect card type from BIN
+                const detectedCardType = detectCardType(binNumber);
+                console.log('Detected card type:', detectedCardType);
 
                 // Clear previous results
                 generatedCards = [];
@@ -578,11 +602,8 @@
 
                 // Generate cards
                 for (let i = 0; i < quantity; i++) {
-                    console.log(`Generating card ${i + 1}`);
-                    
                     // Generate PAN
                     const pan = generatePAN(binNumber, detectedCardType);
-                    console.log('PAN generated:', pan);
                     
                     // Generate month
                     let month;
@@ -591,7 +612,6 @@
                     } else {
                         month = monthType;
                     }
-                    console.log('Month:', month);
                     
                     // Generate year
                     let year;
@@ -600,7 +620,6 @@
                     } else {
                         year = yearType;
                     }
-                    console.log('Year:', year);
                     
                     // Generate CVV
                     let cvv;
@@ -610,7 +629,6 @@
                     } else {
                         cvv = generateRandomCVV(detectedCardType);
                     }
-                    console.log('CVV:', cvv);
 
                     // Format card based on selection
                     let formattedCard;
@@ -626,26 +644,22 @@
                                 card_number: pan,
                                 expiration_month: month,
                                 expiration_year: year,
-                                cvv: cvv.toString()
+                                cvv: cvv
                             };
                             break;
                         default:
                             formattedCard = `${pan}|${month}|${year}|${cvv}`;
                     }
 
-                    console.log('Formatted card:', formattedCard);
                     generatedCards.push(formattedCard);
                     
-                    // Store card object for table display
-                    if (format !== 'json') {
-                        cardData.push({
-                            number: pan,
-                            month: month,
-                            year: year,
-                            cvv: cvv,
-                            formatted: formattedCard
-                        });
-                    }
+                    // Store for reference (no longer used for table)
+                    cardData.push({
+                        number: pan,
+                        month: month,
+                        year: year,
+                        cvv: cvv
+                    });
                 }
 
                 // Handle JSON format specially
@@ -654,17 +668,13 @@
                     generatedCards = [JSON.stringify(jsonArray, null, 2)];
                 }
                 
-                console.log('Final generated cards:', generatedCards);
+                console.log('Generated cards:', generatedCards.length);
                 
                 // Display results
-                if (generatedCards.length > 0) {
-                    displayResults();
-                    showNotification(`Generated ${quantity} ${detectedCardType.toUpperCase()} cards successfully`, 'success');
-                } else {
-                    showNotification('No cards were generated', 'error');
-                }
+                displayResults();
+                showNotification(`Generated ${quantity} ${detectedCardType.toUpperCase()} cards successfully`, 'success');
+                
             } catch (error) {
-                alert('Error in generateCards: ' + error.message);
                 console.error('Generate cards error:', error);
                 showNotification('Error generating cards: ' + error.message, 'error');
             }
@@ -674,41 +684,17 @@
         function displayResults() {
             const resultsSection = document.getElementById('resultsSection');
             const generatedCardsDiv = document.getElementById('generatedCards');
-            const resultsTableBody = document.getElementById('resultsTableBody');
             
-            if (!resultsSection || !generatedCardsDiv || !resultsTableBody) {
+            if (!resultsSection || !generatedCardsDiv) {
                 showNotification('Error: Results elements not found', 'error');
                 return;
             }
             
             resultsSection.style.display = 'block';
             
-            // Display raw output
+            // Display raw output only
             const displayText = generatedCards.join('\n');
-            generatedCardsDiv.innerHTML = displayText;
-            
-            // Display table
-            const format = document.getElementById('outputFormat').value;
-            if (format !== 'json' && cardData.length > 0) {
-                resultsTableBody.innerHTML = '';
-                cardData.forEach((card, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td class="card-number">${card.number}</td>
-                        <td class="expiry">${card.month}/${card.year}</td>
-                        <td class="cvv">${card.cvv}</td>
-                        <td>
-                            <button class="btn btn-sm btn-secondary" onclick="copySingleCard('${card.formatted}')">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                        </td>
-                    `;
-                    resultsTableBody.appendChild(row);
-                });
-            } else {
-                resultsTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: rgba(255,255,255,0.7);">JSON format selected - view raw output below</td></tr>';
-            }
+            generatedCardsDiv.textContent = displayText;
         }
 
         // Copy results to clipboard
@@ -740,7 +726,6 @@
             const a = document.createElement('a');
             a.href = url;
             
-            // Set filename based on format
             let filename = 'generated_cards';
             switch(format) {
                 case 'csv':
@@ -776,8 +761,7 @@
             generatedCards = [];
             cardData = [];
             document.getElementById('resultsSection').style.display = 'none';
-            document.getElementById('generatedCards').innerHTML = '';
-            document.getElementById('resultsTableBody').innerHTML = '';
+            document.getElementById('generatedCards').textContent = '';
             showNotification('Results cleared', 'info');
         }
 
@@ -786,7 +770,6 @@
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             
-            // Create icon based on type
             let icon = 'fas fa-info-circle';
             switch(type) {
                 case 'success':
