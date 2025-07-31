@@ -458,52 +458,6 @@
             return 'custom';
         }
         
-        // Auto-detect card type from BIN
-        function detectCardType(bin) {
-            if (!bin) return 'custom';
-            
-            const binStr = bin.toString();
-            
-            // American Express: 34, 37
-            if (binStr.startsWith('34') || binStr.startsWith('37')) {
-                return 'amex';
-            }
-            
-            // JCB: 35
-            if (binStr.startsWith('35')) {
-                return 'jcb';
-            }
-            
-            // Visa: 4
-            if (binStr.startsWith('4')) {
-                return 'visa';
-            }
-            
-            // Mastercard: 51-55, 2221-2720
-            if (binStr.startsWith('5') || 
-                (parseInt(binStr) >= 2221 && parseInt(binStr) <= 2720)) {
-                return 'mastercard';
-            }
-            
-            // Discover: 6011, 622126-622925, 644-649, 65
-            if (binStr.startsWith('6011') || 
-                binStr.startsWith('622') || 
-                binStr.startsWith('64') || 
-                binStr.startsWith('65')) {
-                return 'discover';
-            }
-            
-            // Diners Club: 300-305, 36, 38-39
-            if (binStr.startsWith('30') || 
-                binStr.startsWith('36') || 
-                binStr.startsWith('38') || 
-                binStr.startsWith('39')) {
-                return 'diners';
-            }
-            
-            return 'custom';
-        }
-        
         // Get card info based on type
         function getCardInfo(cardType) {
             const cardInfo = {
@@ -579,7 +533,6 @@
                 // Generate cards based on settings
         function generateCards() {
             try {
-                alert('generateCards function called!');
                 console.log('generateCards called');
                 
                 // Get all input values
