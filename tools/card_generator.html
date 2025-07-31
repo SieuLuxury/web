@@ -333,6 +333,23 @@
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             updateCardInfo();
+            
+            // Debug: Check if function is available
+            console.log('generateCards function available:', typeof window.generateCards);
+            
+            // Test button click
+            const generateBtn = document.querySelector('button[onclick="generateCards()"]');
+            if (generateBtn) {
+                generateBtn.addEventListener('click', function(e) {
+                    console.log('Button clicked!');
+                    if (typeof window.generateCards === 'function') {
+                        window.generateCards();
+                    } else {
+                        console.error('generateCards function not found!');
+                        alert('generateCards function not found!');
+                    }
+                });
+            }
         });
 
         // Quick test function
@@ -506,7 +523,7 @@
         }
 
         // Generate cards based on settings
-        function generateCards() {
+        window.generateCards = function() {
             try {
                 console.log('generateCards called');
                 
