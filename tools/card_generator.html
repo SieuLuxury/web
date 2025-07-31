@@ -6,6 +6,104 @@
     <title>Premium CC Checker - Card Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
+    <style>
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .mb-4 { margin-bottom: 1.5rem; }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: white;
+            font-weight: 600;
+        }
+        small {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        #resultsSection {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        #generatedCards {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            color: #00ff00;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
 </head>
 <body>
     <!-- Load Navigation -->
@@ -14,8 +112,8 @@
         loadNavigation('card-generator', true);
     </script>
 
-    <!-- Main Content (hidden until navigation loads) -->
-    <main class="main-content" style="opacity: 0; visibility: hidden;" id="mainContent">
+    <!-- Main Content -->
+    <main class="main-content" style="opacity: 1; visibility: visible;" id="mainContent">
         <header class="page-header">
             <h1>Card Generator</h1>
             <p>Generate valid test credit card numbers with custom parameters</p>
@@ -23,31 +121,31 @@
 
         <section class="content-area">
             <div class="form-container fade-in">
-                <h3 style="margin-bottom: 30px; font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; gap: 15px;">
-                    <i class="fas fa-credit-card" style="font-size: 2rem; background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+                <h3 style="margin-bottom: 30px; font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; gap: 15px; color: white;">
+                    <i class="fas fa-credit-card" style="font-size: 2rem; color: #667eea;"></i>
                     Advanced Card Generator
                 </h3>
 
                 <!-- BIN Input -->
-                <div class="card mb-4">
-                    <h4 style="margin-bottom: 20px; color: var(--primary);">
+                <div class="card">
+                    <h4 style="margin-bottom: 20px; color: #667eea;">
                         <i class="fas fa-hashtag"></i> BIN Configuration
                     </h4>
                     
                     <div class="form-group">
                         <label for="binNumber">BIN Number (first 6-8 digits)</label>
                         <input type="text" id="binNumber" class="form-control" placeholder="453212" maxlength="8">
-                        <small style="color: var(--text-gray);">Enter the first 6-8 digits of the card number</small>
+                        <small>Enter the first 6-8 digits of the card number</small>
                     </div>
                 </div>
 
                 <!-- Expiry Date Settings -->
-                <div class="card mb-4">
-                    <h4 style="margin-bottom: 20px; color: var(--primary);">
+                <div class="card">
+                    <h4 style="margin-bottom: 20px; color: #667eea;">
                         <i class="fas fa-calendar"></i> Expiry Date Settings
                     </h4>
                     
-                    <div class="grid grid-2" style="gap: 20px;">
+                    <div class="grid-2">
                         <div class="form-group">
                             <label for="monthType">Month Selection</label>
                             <select id="monthType" class="form-control" onchange="toggleMonthInput()">
@@ -75,7 +173,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-2" style="gap: 20px; margin-top: 20px;">
+                    <div class="grid-2" style="margin-top: 20px;">
                         <div class="form-group">
                             <label for="yearType">Year Selection</label>
                             <select id="yearType" class="form-control" onchange="toggleYearInput()">
@@ -94,21 +192,21 @@
                 </div>
 
                 <!-- CVV Settings -->
-                <div class="card mb-4">
-                    <h4 style="margin-bottom: 20px; color: var(--primary);">
+                <div class="card">
+                    <h4 style="margin-bottom: 20px; color: #667eea;">
                         <i class="fas fa-shield-alt"></i> CVV Settings
                     </h4>
                     
                     <div class="form-group">
                         <label for="cvvInput">CVV (leave empty for random)</label>
                         <input type="text" id="cvvInput" class="form-control" placeholder="123 (optional)" maxlength="4">
-                        <small style="color: var(--text-gray);">Leave empty to generate random CVV (100-999)</small>
+                        <small>Leave empty to generate random CVV (100-999)</small>
                     </div>
                 </div>
 
                 <!-- Output Format -->
-                <div class="card mb-4">
-                    <h4 style="margin-bottom: 20px; color: var(--primary);">
+                <div class="card">
+                    <h4 style="margin-bottom: 20px; color: #667eea;">
                         <i class="fas fa-file-code"></i> Output Format
                     </h4>
                     
@@ -121,27 +219,27 @@
                         </select>
                     </div>
 
-                    <div id="formatPreview" style="background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px; margin-top: 15px; font-family: 'Courier New', monospace; font-size: 0.9rem;">
+                    <div id="formatPreview" style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-top: 15px; font-family: 'Courier New', monospace; font-size: 0.9rem; color: #00ff00;">
                         <strong>Preview:</strong><br>
                         <span id="previewText">4532123456789012|12|25|123</span>
                     </div>
                 </div>
 
                 <!-- Quantity -->
-                <div class="card mb-4">
-                    <h4 style="margin-bottom: 20px; color: var(--primary);">
+                <div class="card">
+                    <h4 style="margin-bottom: 20px; color: #667eea;">
                         <i class="fas fa-list-ol"></i> Quantity
                     </h4>
                     
                     <div class="form-group">
                         <label for="quantity">Number of Cards</label>
                         <input type="number" id="quantity" class="form-control" placeholder="10" min="1" max="1000" value="10">
-                        <small style="color: var(--text-gray);">Enter the number of cards to generate (1-1000)</small>
+                        <small>Enter the number of cards to generate (1-1000)</small>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="card mb-4">
+                <div class="card">
                     <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                         <button class="btn btn-primary" onclick="generateCards()">
                             <i class="fas fa-magic"></i>
@@ -160,7 +258,7 @@
 
                 <!-- Results Section -->
                 <div class="card" id="resultsSection" style="display: none;">
-                    <h4 style="margin-bottom: 20px; color: var(--primary);">
+                    <h4 style="margin-bottom: 20px; color: #667eea;">
                         <i class="fas fa-list"></i> Generated Cards
                     </h4>
                     
@@ -175,7 +273,7 @@
                         </button>
                     </div>
                     
-                    <div id="generatedCards" style="font-family: 'Courier New', monospace; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px; max-height: 400px; overflow-y: auto; white-space: pre-wrap;"></div>
+                    <div id="generatedCards"></div>
                 </div>
             </div>
         </section>
@@ -188,8 +286,10 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded, initializing...');
             populateYearOptions();
             toggleFormatPreview();
+            console.log('Initialization complete');
         });
 
         // Populate year options (current year to current + 8)
@@ -310,12 +410,16 @@
 
         // Generate cards based on settings
         function generateCards() {
+            console.log('Generate cards function called');
+            
             const binNumber = document.getElementById('binNumber').value.trim();
             const monthType = document.getElementById('monthType').value;
             const yearType = document.getElementById('yearType').value;
             const cvvInput = document.getElementById('cvvInput').value.trim();
             const format = document.getElementById('outputFormat').value;
             const quantity = parseInt(document.getElementById('quantity').value) || 10;
+
+            console.log('Input values:', { binNumber, monthType, yearType, cvvInput, format, quantity });
 
             if (!binNumber) {
                 showNotification('Please enter a BIN number', 'error');
@@ -393,6 +497,7 @@
                 generatedCards = [JSON.stringify(generatedCards, null, 2)];
             }
 
+            console.log('Generated cards:', generatedCards);
             displayResults();
             showNotification(`Generated ${quantity} cards successfully`, 'success');
         }
@@ -470,18 +575,6 @@
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.textContent = message;
-            
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 5px;
-                color: white;
-                font-weight: bold;
-                z-index: 1000;
-                animation: slideIn 0.3s ease;
-            `;
             
             switch(type) {
                 case 'success':
