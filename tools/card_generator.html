@@ -333,23 +333,6 @@
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             updateCardInfo();
-            
-            // Debug: Check if function is available
-            console.log('generateCards function available:', typeof window.generateCards);
-            
-            // Test button click
-            const generateBtn = document.querySelector('button[onclick="generateCards()"]');
-            if (generateBtn) {
-                generateBtn.addEventListener('click', function(e) {
-                    console.log('Button clicked!');
-                    if (typeof window.generateCards === 'function') {
-                        window.generateCards();
-                    } else {
-                        console.error('generateCards function not found!');
-                        alert('generateCards function not found!');
-                    }
-                });
-            }
         });
 
         // Quick test function
@@ -523,10 +506,9 @@
         }
 
         // Generate cards based on settings
-        window.generateCards = function() {
+        function generateCards() {
             try {
-                alert('Local generateCards function called!');
-                console.log('Local generateCards function called');
+                console.log('generateCards called');
                 
                 // Get all input values
                 const binNumber = document.getElementById('binNumber').value.trim();

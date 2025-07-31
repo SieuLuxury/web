@@ -672,72 +672,7 @@ function start3DSCheck() {
     }, 2000);
 }
 
-function generateCards() {
-    // Check if we're on the card generator page
-    const binInput = document.getElementById('binNumber');
-    const monthTypeInput = document.getElementById('monthType');
-    const resultsSection = document.getElementById('resultsSection');
-    
-    if (binInput && monthTypeInput && resultsSection) {
-        // We're on the card generator page, let the page's function handle it
-        return;
-    }
-    
-    // Legacy function for other pages
-    const brand = document.getElementById('cardBrand');
-    if (!brand) {
-        console.warn('cardBrand element not found');
-        return;
-    }
-    
-    const count = parseInt(document.getElementById('cardCount')?.value) || 10;
-    
-    toastManager.info('Generating Cards', `Generating ${count} ${brand.value} cards...`);
-    
-    const resultsDiv = document.getElementById('generatedResults');
-    if (!resultsDiv) {
-        console.warn('generatedResults element not found');
-        return;
-    }
-    
-    let cards = [];
-    
-    for (let i = 0; i < count; i++) {
-        let cardNumber = '';
-        if (brand.value === 'visa') {
-            cardNumber = '4532' + Math.random().toString().slice(2, 14);
-        } else if (brand.value === 'mastercard') {
-            cardNumber = '5555' + Math.random().toString().slice(2, 14);
-        } else if (brand.value === 'amex') {
-            cardNumber = '3782' + Math.random().toString().slice(2, 13);
-        } else {
-            cardNumber = '6011' + Math.random().toString().slice(2, 14);
-        }
-        
-        const expMonth = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
-        const expYear = String(2025 + Math.floor(Math.random() * 5));
-        const cvv = String(Math.floor(Math.random() * 900) + 100);
-        
-        cards.push(`${cardNumber}|${expMonth}|${expYear}|${cvv}`);
-    }
-    
-    resultsDiv.innerHTML = `
-        <h4 style="margin-bottom: 20px; color: var(--success);">
-            <i class="fas fa-check-circle"></i>
-            Generated ${count} ${brand.value.toUpperCase()} Cards
-        </h4>
-        <div class="form-container">
-            <textarea class="form-control" rows="10" readonly>${cards.join('\n')}</textarea>
-            <div style="margin-top: 15px;">
-                <button class="btn btn-secondary" onclick="copyToClipboard('${cards.join('\\n')}')">
-                    <i class="fas fa-copy"></i> Copy All
-                </button>
-            </div>
-        </div>
-    `;
-    
-    toastManager.success('Cards Generated', `Successfully generated ${count} cards`);
-}
+
 
 function clearGenerated() {
     document.getElementById('generatedResults').innerHTML = '';
