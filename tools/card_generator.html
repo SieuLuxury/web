@@ -254,18 +254,6 @@
                         <i class="fas fa-magic"></i>
                         Generate Cards
                     </button>
-                    <button class="btn btn-secondary" onclick="clearResults()">
-                        <i class="fas fa-trash"></i>
-                        Clear Results
-                    </button>
-                    <button class="btn btn-secondary" onclick="loadSampleBIN()">
-                        <i class="fas fa-magic"></i>
-                        Try Sample BIN
-                    </button>
-                    <button class="btn btn-secondary" onclick="quickTest()">
-                        <i class="fas fa-play"></i>
-                        Quick Test
-                    </button>
                 </div>
             </div>
 
@@ -284,10 +272,6 @@
                         <button class="btn btn-secondary btn-sm" onclick="downloadResults()">
                             <i class="fas fa-download"></i>
                             Download
-                        </button>
-                        <button class="btn btn-secondary btn-sm" onclick="clearResults()">
-                            <i class="fas fa-trash"></i>
-                            Clear
                         </button>
                     </div>
                 </div>
@@ -308,25 +292,7 @@
             updateCardInfo();
         });
 
-        // Quick test function
-        function quickTest() {
-            try {
-                document.getElementById('binNumber').value = '453212';
-                document.getElementById('monthType').value = 'random';
-                document.getElementById('yearType').value = 'random';
-                document.getElementById('cvvInput').value = '';
-                document.getElementById('outputFormat').value = 'pipe';
-                document.getElementById('quantity').value = '5';
-                
-                updateCardInfo();
-                generateCards();
-                
-                toastManager.info('Quick Test', 'Quick test started with auto-detected cards');
-            } catch (error) {
-                console.error('Quick test error:', error);
-                toastManager.error('Quick Test Error', 'Error in quick test: ' + error.message);
-            }
-        }
+
 
         // Generate random PAN (Personal Account Number)
         function generatePAN(bin, cardType) {
@@ -443,24 +409,7 @@
             return Math.floor(Math.random() * (maxCVV + 1)).toString().padStart(cardInfo.cvvLength, '0');
         }
 
-        // Load sample BIN
-        function loadSampleBIN() {
-            const sampleBINs = [
-                '453212', // Visa
-                '541275', // Mastercard
-                '371449', // Amex
-                '601100', // Discover
-                '352800', // JCB
-                '305693'  // Diners
-            ];
-            
-            const randomBIN = sampleBINs[Math.floor(Math.random() * sampleBINs.length)];
-            document.getElementById('binNumber').value = randomBIN;
-            
-            const detectedCardType = detectCardType(randomBIN);
-            updateCardInfo();
-            toastManager.info('Sample BIN Loaded', `Sample ${detectedCardType.toUpperCase()} BIN loaded: ${randomBIN}`);
-        }
+
 
         // Update card info based on BIN input
         function updateCardInfo() {
@@ -676,15 +625,7 @@
             });
         }
 
-        // Clear results
-        function clearResults() {
-            generatedCards = [];
-            cardData = [];
-            document.getElementById('resultsSection').style.display = 'none';
-            document.getElementById('generatedCards').textContent = '';
-            
-            toastManager.info('Cleared', 'Results cleared');
-        }
+
     </script>
 </body>
 </html>
