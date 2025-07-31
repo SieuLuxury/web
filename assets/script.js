@@ -714,21 +714,39 @@ function start3DSCheck() {
 }
 
 function generateCards() {
-    const brand = document.getElementById('cardBrand').value;
-    const count = parseInt(document.getElementById('cardCount').value) || 10;
+    // Check if we're on the card generator page
+    const binInput = document.getElementById('binNumber');
+    if (binInput) {
+        // We're on the card generator page, let the page's function handle it
+        return;
+    }
     
-    toastManager.info('Generating Cards', `Generating ${count} ${brand} cards...`);
+    // Legacy function for other pages
+    const brand = document.getElementById('cardBrand');
+    if (!brand) {
+        console.warn('cardBrand element not found');
+        return;
+    }
+    
+    const count = parseInt(document.getElementById('cardCount')?.value) || 10;
+    
+    toastManager.info('Generating Cards', `Generating ${count} ${brand.value} cards...`);
     
     const resultsDiv = document.getElementById('generatedResults');
+    if (!resultsDiv) {
+        console.warn('generatedResults element not found');
+        return;
+    }
+    
     let cards = [];
     
     for (let i = 0; i < count; i++) {
         let cardNumber = '';
-        if (brand === 'visa') {
+        if (brand.value === 'visa') {
             cardNumber = '4532' + Math.random().toString().slice(2, 14);
-        } else if (brand === 'mastercard') {
+        } else if (brand.value === 'mastercard') {
             cardNumber = '5555' + Math.random().toString().slice(2, 14);
-        } else if (brand === 'amex') {
+        } else if (brand.value === 'amex') {
             cardNumber = '3782' + Math.random().toString().slice(2, 13);
         } else {
             cardNumber = '6011' + Math.random().toString().slice(2, 14);
@@ -744,7 +762,7 @@ function generateCards() {
     resultsDiv.innerHTML = `
         <h4 style="margin-bottom: 20px; color: var(--success);">
             <i class="fas fa-check-circle"></i>
-            Generated ${count} ${brand.toUpperCase()} Cards
+            Generated ${count} ${brand.value.toUpperCase()} Cards
         </h4>
         <div class="form-container">
             <textarea class="form-control" rows="10" readonly>${cards.join('\n')}</textarea>
