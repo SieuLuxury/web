@@ -474,16 +474,16 @@
                 console.log('CVV:', cvv);
 
                 // Format card based on selection
-                let cardData;
+                let formattedCard;
                 switch (format) {
                     case 'pipe':
-                        cardData = `${pan}|${month}|${year}|${cvv}`;
+                        formattedCard = `${pan}|${month}|${year}|${cvv}`;
                         break;
                     case 'csv':
-                        cardData = `${pan},${month},${year},${cvv}`;
+                        formattedCard = `${pan},${month},${year},${cvv}`;
                         break;
                     case 'json':
-                        cardData = {
+                        formattedCard = {
                             card_number: pan,
                             expiration_month: month,
                             expiration_year: year,
@@ -491,11 +491,11 @@
                         };
                         break;
                     default:
-                        cardData = `${pan}|${month}|${year}|${cvv}`;
+                        formattedCard = `${pan}|${month}|${year}|${cvv}`;
                 }
 
-                console.log('Card data:', cardData);
-                generatedCards.push(cardData);
+                console.log('Formatted card:', formattedCard);
+                generatedCards.push(formattedCard);
                 
                 // Store card object for table display
                 if (format !== 'json') {
@@ -504,7 +504,7 @@
                         month: month,
                         year: year,
                         cvv: cvv,
-                        formatted: cardData
+                        formatted: formattedCard
                     });
                 }
             }
@@ -516,6 +516,7 @@
             }
 
             console.log('Final generated cards:', generatedCards);
+            console.log('Card data for table:', cardData);
             console.log('=== GENERATE CARDS END ===');
             
             displayResults();
