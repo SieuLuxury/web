@@ -64,8 +64,8 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         .btn-sm {
-            padding: 6px 12px;
-            font-size: 12px;
+            padding: 8px 16px;
+            font-size: 13px;
         }
         label {
             display: block;
@@ -80,7 +80,7 @@
         .results-section {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
-            padding: 30px;
+            padding: 25px;
             margin-top: 30px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -89,60 +89,35 @@
             background: rgba(0, 0, 0, 0.5);
             padding: 20px;
             border-radius: 10px;
-            max-height: 500px;
+            max-height: 400px;
             overflow-y: auto;
             white-space: pre-wrap;
             color: #00ff00;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            min-height: 150px;
+            min-height: 120px;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.5;
         }
         .results-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         .results-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.3rem;
+            font-weight: 600;
             color: #667eea;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         .results-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
-        }
-        .results-stats {
-            background: rgba(102, 126, 234, 0.1);
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(102, 126, 234, 0.2);
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-        }
-        .stat-item {
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #667eea;
-        }
-        .stat-label {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 5px;
         }
         .fade-in {
             animation: fadeIn 0.5s ease-in;
@@ -294,7 +269,7 @@
                 </div>
             </div>
 
-            <!-- Results Section - Separated -->
+            <!-- Results Section - Simplified -->
             <div class="results-section fade-in" id="resultsSection" style="display: none;">
                 <div class="results-header">
                     <div class="results-title">
@@ -302,50 +277,23 @@
                         Generated Cards
                     </div>
                     <div class="results-actions">
-                        <button class="btn btn-secondary" onclick="copyResults()">
+                        <button class="btn btn-secondary btn-sm" onclick="copyResults()">
                             <i class="fas fa-copy"></i>
                             Copy All
                         </button>
-                        <button class="btn btn-secondary" onclick="downloadResults()">
+                        <button class="btn btn-secondary btn-sm" onclick="downloadResults()">
                             <i class="fas fa-download"></i>
                             Download
                         </button>
-                        <button class="btn btn-secondary" onclick="clearResults()">
+                        <button class="btn btn-secondary btn-sm" onclick="clearResults()">
                             <i class="fas fa-trash"></i>
                             Clear
                         </button>
                     </div>
                 </div>
 
-                <!-- Results Stats -->
-                <div class="results-stats">
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-value" id="totalCards">0</div>
-                            <div class="stat-label">Total Cards</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="cardType">-</div>
-                            <div class="stat-label">Card Type</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="outputFormat">-</div>
-                            <div class="stat-label">Format</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="generationTime">-</div>
-                            <div class="stat-label">Generation Time</div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Generated Cards Output -->
-                <div>
-                    <h5 style="margin-bottom: 15px; color: #667eea; font-size: 1.1rem;">
-                        <i class="fas fa-code"></i> Generated Cards Output
-                    </h5>
-                    <div id="generatedCards"></div>
-                </div>
+                <div id="generatedCards"></div>
             </div>
         </section>
     </main>
@@ -532,8 +480,6 @@
 
         // Generate cards based on settings
         function generateCards() {
-            const startTime = performance.now();
-            
             try {
                 console.log('generateCards called');
                 
@@ -627,7 +573,7 @@
 
                     generatedCards.push(formattedCard);
                     
-                    // Store for reference (no longer used for table)
+                    // Store for reference
                     cardData.push({
                         number: pan,
                         month: month,
@@ -642,13 +588,10 @@
                     generatedCards = [JSON.stringify(jsonArray, null, 2)];
                 }
                 
-                const endTime = performance.now();
-                const generationTime = ((endTime - startTime) / 1000).toFixed(2);
-                
                 console.log('Generated cards:', generatedCards.length);
                 
                 // Display results
-                displayResults(detectedCardType, format, generationTime);
+                displayResults();
                 toastManager.success('Cards Generated', `Successfully generated ${quantity} ${detectedCardType.toUpperCase()} cards`);
                 
             } catch (error) {
@@ -658,7 +601,7 @@
         }
 
         // Display generated results
-        function displayResults(cardType, format, generationTime) {
+        function displayResults() {
             const resultsSection = document.getElementById('resultsSection');
             const generatedCardsDiv = document.getElementById('generatedCards');
             
@@ -668,12 +611,6 @@
             }
             
             resultsSection.style.display = 'block';
-            
-            // Update stats
-            document.getElementById('totalCards').textContent = cardData.length;
-            document.getElementById('cardType').textContent = cardType.toUpperCase();
-            document.getElementById('outputFormat').textContent = format.toUpperCase();
-            document.getElementById('generationTime').textContent = generationTime + 's';
             
             // Display raw output only
             const displayText = generatedCards.join('\n');
@@ -745,12 +682,6 @@
             cardData = [];
             document.getElementById('resultsSection').style.display = 'none';
             document.getElementById('generatedCards').textContent = '';
-            
-            // Reset stats
-            document.getElementById('totalCards').textContent = '0';
-            document.getElementById('cardType').textContent = '-';
-            document.getElementById('outputFormat').textContent = '-';
-            document.getElementById('generationTime').textContent = '-';
             
             toastManager.info('Cleared', 'Results cleared');
         }
