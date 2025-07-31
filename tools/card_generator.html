@@ -341,7 +341,7 @@
 
         // Generate cards based on settings
         function generateCards() {
-            console.log('Generate cards function called');
+            console.log('=== GENERATE CARDS START ===');
             
             const binNumber = document.getElementById('binNumber').value.trim();
             const monthType = document.getElementById('monthType').value;
@@ -350,8 +350,16 @@
             const format = document.getElementById('outputFormat').value;
             const quantity = parseInt(document.getElementById('quantity').value) || 10;
 
-            console.log('Input values:', { binNumber, monthType, yearType, cvvInput, format, quantity });
+            console.log('Input values:', { 
+                binNumber, 
+                monthType, 
+                yearType, 
+                cvvInput, 
+                format, 
+                quantity 
+            });
 
+            // Validation
             if (!binNumber) {
                 showNotification('Please enter a BIN number', 'error');
                 return;
@@ -367,10 +375,23 @@
                 return;
             }
 
-            generatedCards = [];
+            console.log('Validation passed, starting generation...');
 
+            // Clear previous results
+            generatedCards = [];
+            
+            // Handle CSV format - add header first
+            if (format === 'csv') {
+                generatedCards.push('card_number,expiration_month,expiration_year,cvv');
+            }
+
+            // Generate cards
             for (let i = 0; i < quantity; i++) {
+                console.log(`Generating card ${i + 1}/${quantity}`);
+                
+                // Generate PAN
                 const pan = generatePAN(binNumber);
+                console.log('Generated PAN:', pan);
                 
                 // Generate month
                 let month;
@@ -379,7 +400,8 @@
                 } else {
                     month = monthType;
                 }
-
+                console.log('Month:', month);
+                
                 // Generate year
                 let year;
                 if (yearType === 'random') {
@@ -387,14 +409,16 @@
                 } else {
                     year = yearType;
                 }
-
+                console.log('Year:', year);
+                
                 // Generate CVV
                 let cvv;
                 if (cvvInput) {
-                    cvv = cvvInput;
+                    cvv = cvvInput.padStart(3, '0');
                 } else {
                     cvv = generateRandomCVV();
                 }
+                console.log('CVV:', cvv);
 
                 // Format card based on selection
                 let cardData;
@@ -403,10 +427,7 @@
                         cardData = `${pan}|${month}|${year}|${cvv}`;
                         break;
                     case 'csv':
-                        if (i === 0) {
-                            cardData = 'card_number,expiration_month,expiration_year,cvv\n';
-                        }
-                        cardData += `${pan},${month},${year},${cvv}`;
+                        cardData = `${pan},${month},${year},${cvv}`;
                         break;
                     case 'json':
                         cardData = {
@@ -420,26 +441,41 @@
                         cardData = `${pan}|${month}|${year}|${cvv}`;
                 }
 
+                console.log('Card data:', cardData);
                 generatedCards.push(cardData);
             }
 
             // Handle JSON format specially
             if (format === 'json') {
-                generatedCards = [JSON.stringify(generatedCards, null, 2)];
+                const jsonArray = generatedCards;
+                generatedCards = [JSON.stringify(jsonArray, null, 2)];
             }
 
-            console.log('Generated cards:', generatedCards);
+            console.log('Final generated cards:', generatedCards);
+            console.log('=== GENERATE CARDS END ===');
+            
             displayResults();
             showNotification(`Generated ${quantity} cards successfully`, 'success');
         }
 
         // Display generated results
         function displayResults() {
+            console.log('Displaying results...');
             const resultsSection = document.getElementById('resultsSection');
             const generatedCardsDiv = document.getElementById('generatedCards');
             
+            if (!resultsSection || !generatedCardsDiv) {
+                console.error('Results elements not found!');
+                return;
+            }
+            
             resultsSection.style.display = 'block';
-            generatedCardsDiv.innerHTML = generatedCards.join('\n');
+            
+            const displayText = generatedCards.join('\n');
+            console.log('Display text:', displayText);
+            
+            generatedCardsDiv.innerHTML = displayText;
+            console.log('Results displayed successfully');
         }
 
         // Copy results to clipboard
