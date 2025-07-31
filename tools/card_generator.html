@@ -152,13 +152,28 @@
                 <!-- BIN Input -->
                 <div class="card">
                     <h4 style="margin-bottom: 20px; color: #667eea;">
-                        <i class="fas fa-hashtag"></i> BIN Configuration
+                        <i class="fas fa-hashtag"></i> Card Configuration
                     </h4>
                     
-                    <div class="form-group">
-                        <label for="binNumber">BIN Number (first 6-8 digits)</label>
-                        <input type="text" id="binNumber" class="form-control" placeholder="453212" maxlength="8">
-                        <small>Enter the first 6-8 digits of the card number</small>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="cardType">Card Type</label>
+                            <select id="cardType" class="form-control" onchange="updateBINPlaceholder()">
+                                <option value="visa">Visa (16 digits, 3 CVV)</option>
+                                <option value="mastercard">Mastercard (16 digits, 3 CVV)</option>
+                                <option value="amex">American Express (15 digits, 4 CVV)</option>
+                                <option value="discover">Discover (16 digits, 3 CVV)</option>
+                                <option value="jcb">JCB (15 digits, 3 CVV)</option>
+                                <option value="diners">Diners Club (14 digits, 3 CVV)</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="binNumber">BIN Number</label>
+                            <input type="text" id="binNumber" class="form-control" placeholder="453212" maxlength="8">
+                            <small>Enter the first 6-8 digits of the card number</small>
+                        </div>
                     </div>
                 </div>
 
@@ -214,8 +229,8 @@
                     
                     <div class="form-group">
                         <label for="cvvInput">CVV (leave empty for random)</label>
-                        <input type="text" id="cvvInput" class="form-control" placeholder="000 (optional)" maxlength="3">
-                        <small>Leave empty to generate random CVV (000-999)</small>
+                        <input type="text" id="cvvInput" class="form-control" placeholder="000 (optional)" maxlength="4">
+                        <small id="cvvInfo">Leave empty to generate random CVV</small>
                     </div>
                 </div>
 
@@ -326,12 +341,14 @@
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Page loaded, initializing...');
+            updateBINPlaceholder();
             console.log('Initialization complete');
         });
 
         // Generate random PAN (Personal Account Number)
-        function generatePAN(bin, length = 16) {
-            const remainingLength = length - bin.length;
+        function generatePAN(bin, cardType) {
+            const cardInfo = getCardInfo(cardType);
+            const remainingLength = cardInfo.length - bin.length;
             let pan = bin;
             
             // Generate random digits for remaining positions
@@ -378,23 +395,97 @@
             return years[Math.floor(Math.random() * years.length)];
         }
 
-        // Generate random CVV
-        function generateRandomCVV() {
-            return Math.floor(Math.random() * 1000).toString().padStart(3, '0'); // 000-999
+        // Get card info based on type
+        function getCardInfo(cardType) {
+            const cardInfo = {
+                visa: { length: 16, cvvLength: 3, prefix: '4' },
+                mastercard: { length: 16, cvvLength: 3, prefix: '5' },
+                amex: { length: 15, cvvLength: 4, prefix: '3' },
+                discover: { length: 16, cvvLength: 3, prefix: '6' },
+                jcb: { length: 15, cvvLength: 3, prefix: '3' },
+                diners: { length: 14, cvvLength: 3, prefix: '3' },
+                custom: { length: 16, cvvLength: 3, prefix: '' }
+            };
+            return cardInfo[cardType] || cardInfo.visa;
+        }
+
+        // Generate random CVV based on card type
+        function generateRandomCVV(cardType) {
+            const cardInfo = getCardInfo(cardType);
+            const maxCVV = Math.pow(10, cardInfo.cvvLength) - 1;
+            return Math.floor(Math.random() * (maxCVV + 1)).toString().padStart(cardInfo.cvvLength, '0');
         }
 
         // Load sample BIN
         function loadSampleBIN() {
-            const sampleBINs = ['453212', '541275', '400555', '510510', '411111'];
+            const cardType = document.getElementById('cardType').value;
+            let sampleBINs = [];
+            
+            switch(cardType) {
+                case 'visa':
+                    sampleBINs = ['453212', '400555', '411111', '422222'];
+                    break;
+                case 'mastercard':
+                    sampleBINs = ['541275', '510510', '555555', '520082'];
+                    break;
+                case 'amex':
+                    sampleBINs = ['371449', '378282', '371449', '374245'];
+                    break;
+                case 'discover':
+                    sampleBINs = ['601100', '601111', '601100', '601101'];
+                    break;
+                case 'jcb':
+                    sampleBINs = ['352800', '356600', '352800', '358999'];
+                    break;
+                case 'diners':
+                    sampleBINs = ['305693', '385200', '305693', '367001'];
+                    break;
+                default:
+                    sampleBINs = ['453212', '541275', '400555', '510510', '411111'];
+            }
+            
             const randomBIN = sampleBINs[Math.floor(Math.random() * sampleBINs.length)];
             document.getElementById('binNumber').value = randomBIN;
-            showNotification('Sample BIN loaded: ' + randomBIN, 'info');
+            showNotification(`Sample ${cardType.toUpperCase()} BIN loaded: ${randomBIN}`, 'info');
+        }
+
+        // Update BIN placeholder based on card type
+        function updateBINPlaceholder() {
+            const cardType = document.getElementById('cardType').value;
+            const binInput = document.getElementById('binNumber');
+            const cvvInfo = document.getElementById('cvvInfo');
+            const cardInfo = getCardInfo(cardType);
+
+            // Update BIN placeholder
+            if (cardType === 'visa') {
+                binInput.placeholder = `453212`;
+            } else if (cardType === 'mastercard') {
+                binInput.placeholder = `541275`;
+            } else if (cardType === 'amex') {
+                binInput.placeholder = `371449`;
+            } else if (cardType === 'discover') {
+                binInput.placeholder = `601100`;
+            } else if (cardType === 'jcb') {
+                binInput.placeholder = `352800`;
+            } else if (cardType === 'diners') {
+                binInput.placeholder = `305693`;
+            } else if (cardType === 'custom') {
+                binInput.placeholder = `Enter the first 6-8 digits of the card number`;
+            } else {
+                binInput.placeholder = `Enter the first 6-8 digits of the card number`;
+            }
+
+            // Update CVV info
+            const maxCVV = Math.pow(10, cardInfo.cvvLength) - 1;
+            const minCVV = '0'.repeat(cardInfo.cvvLength);
+            cvvInfo.textContent = `Leave empty to generate random CVV (${minCVV}-${maxCVV})`;
         }
 
         // Generate cards based on settings
         function generateCards() {
             console.log('=== GENERATE CARDS START ===');
             
+            const cardType = document.getElementById('cardType').value;
             const binNumber = document.getElementById('binNumber').value.trim();
             const monthType = document.getElementById('monthType').value;
             const yearType = document.getElementById('yearType').value;
@@ -403,6 +494,7 @@
             const quantity = parseInt(document.getElementById('quantity').value) || 10;
 
             console.log('Input values:', { 
+                cardType, 
                 binNumber, 
                 monthType, 
                 yearType, 
@@ -443,7 +535,7 @@
                 console.log(`Generating card ${i + 1}/${quantity}`);
                 
                 // Generate PAN
-                const pan = generatePAN(binNumber);
+                const pan = generatePAN(binNumber, cardType);
                 console.log('Generated PAN:', pan);
                 
                 // Generate month
@@ -467,9 +559,10 @@
                 // Generate CVV
                 let cvv;
                 if (cvvInput) {
-                    cvv = cvvInput.padStart(3, '0');
+                    const cardInfo = getCardInfo(cardType);
+                    cvv = cvvInput.padStart(cardInfo.cvvLength, '0');
                 } else {
-                    cvv = generateRandomCVV();
+                    cvv = generateRandomCVV(cardType);
                 }
                 console.log('CVV:', cvv);
 
