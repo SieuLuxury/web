@@ -675,9 +675,9 @@ function start3DSCheck() {
 function generateCards() {
     // Check if we're on the card generator page
     const binInput = document.getElementById('binNumber');
-    const cardTypeInput = document.getElementById('cardType');
+    const monthTypeInput = document.getElementById('monthType');
     
-    if (binInput && cardTypeInput) {
+    if (binInput && monthTypeInput) {
         // We're on the card generator page, let the page's function handle it
         return;
     }
