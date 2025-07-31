@@ -676,8 +676,9 @@ function generateCards() {
     // Check if we're on the card generator page
     const binInput = document.getElementById('binNumber');
     const monthTypeInput = document.getElementById('monthType');
+    const resultsSection = document.getElementById('resultsSection');
     
-    if (binInput && monthTypeInput) {
+    if (binInput && monthTypeInput && resultsSection) {
         // We're on the card generator page, let the page's function handle it
         return;
     }
