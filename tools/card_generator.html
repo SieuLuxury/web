@@ -7,127 +7,136 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
     <style>
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        .mb-4 { margin-bottom: 1.5rem; }
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: white;
-            font-weight: 600;
-        }
-        small {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .results-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #667eea;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .results-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .results-actions .btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-        .results-actions .btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        #generatedCards {
-            font-family: 'Courier New', monospace;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            max-height: 400px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            min-height: 120px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: white;
+    font-weight: 600;
+}
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .results-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 15px;
-            }
-            .results-title {
-                font-size: 1.3rem;
-                text-align: center;
-            }
-            .results-actions {
-                justify-content: center;
-                gap: 8px;
-            }
-            .results-actions .btn {
-                flex: 1;
-                min-width: 120px;
-                justify-content: center;
-                padding: 12px 16px;
-                font-size: 14px;
-            }
-            .results-section {
-                padding: 20px;
-                margin-top: 20px;
-            }
-            #generatedCards {
-                padding: 15px;
-                font-size: 13px;
-                max-height: 300px;
-            }
-        }
-        @media (max-width: 480px) {
-            .results-actions .btn {
-                min-width: 100px;
-                padding: 10px 12px;
-                font-size: 12px;
-            }
-            .results-title {
-                font-size: 1.2rem;
-            }
-        }
+small {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
 
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.results-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #667eea;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.results-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.results-actions .btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.results-actions .btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+#generatedCards {
+    font-family: 'Courier New', monospace;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-height: 120px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .results-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .results-title {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    .results-actions {
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .results-actions .btn {
+        flex: 1;
+        min-width: 120px;
+        justify-content: center;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    #generatedCards {
+        padding: 15px;
+        font-size: 13px;
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .results-actions .btn {
+        min-width: 100px;
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .results-title {
+        font-size: 1.2rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -151,8 +160,8 @@
                 
                 <div class="form-group">
                     <label for="binNumber">BIN Number</label>
-                    <input type="text" id="binNumber" class="form-control" placeholder="453212" maxlength="8" oninput="updateCardInfo()">
-                    <small>Enter the first 6-8 digits of the card number. Card type will be auto-detected.</small>
+                    <input type="text" id="binNumber" class="form-control" placeholder="453212" oninput="updateCardInfo()">
+                    <small>Enter the first 6 digits of the card number. Card type will be auto-detected.</small>
                 </div>
 
                 <div class="grid-2">
