@@ -1,94 +1,10 @@
-/* ========================================
-   PREMIUM CC CHECKER - CONSOLIDATED JS
-   ======================================== */
-
-// Global variables
 let currentPage = 'home';
-let generatedCards = [];
-let cardData = [];
-let binInfo = null;
 
-/* ===== AUTHENTICATION SYSTEM ===== */
-// Check if user is authenticated
-function isAuthenticated() {
-    const savedAuth = localStorage.getItem('telegram_auth');
-    if (!savedAuth) return false;
-    
-    try {
-        const authData = JSON.parse(savedAuth);
-        const now = Date.now();
-        const authTime = authData.timestamp;
-        const twentyFourHours = 24 * 60 * 60 * 1000;
-        
-        return (now - authTime) < twentyFourHours;
-    } catch (error) {
-        localStorage.removeItem('telegram_auth');
-        return false;
-    }
-}
-
-// Get user data from localStorage
-function getUserData() {
-    const savedAuth = localStorage.getItem('telegram_auth');
-    if (savedAuth) {
-        try {
-            return JSON.parse(savedAuth);
-        } catch (error) {
-            return null;
-        }
-    }
-    return null;
-}
-
-// Check Authentication First
-function checkAuthentication() {
-    const savedAuth = localStorage.getItem('telegram_auth');
-    if (!savedAuth) {
-        window.location.href = '/web/login.html';
-        return false;
-    }
-    
-    try {
-        const authData = JSON.parse(savedAuth);
-        const now = Date.now();
-        const authTime = authData.timestamp;
-        const twentyFourHours = 24 * 60 * 60 * 1000;
-        
-        if ((now - authTime) >= twentyFourHours) {
-            localStorage.removeItem('telegram_auth');
-            window.location.href = '/web/login.html';
-            return false;
-        }
-        
-        return true;
-    } catch (error) {
-        localStorage.removeItem('telegram_auth');
-        window.location.href = '/web/login.html';
-        return false;
-    }
-}
-
-// Logout function
-function logout() {
-    localStorage.removeItem('telegram_auth');
-    window.location.href = '/web/login.html';
-}
-
-/* ===== TOAST NOTIFICATION SYSTEM ===== */
+// Toast System
 class ToastManager {
     constructor() {
         this.container = document.getElementById('toastContainer');
         this.toasts = [];
-        this.createContainer();
-    }
-
-    createContainer() {
-        if (!this.container) {
-            this.container = document.createElement('div');
-            this.container.id = 'toastContainer';
-            this.container.className = 'toast-container';
-            document.body.appendChild(this.container);
-        }
     }
 
     show(type, title, message, duration = 5000) {
@@ -169,225 +85,8 @@ class ToastManager {
     info(title, message) { return this.show('info', title, message); }
 }
 
-// Initialize toast manager
 const toastManager = new ToastManager();
 
-/* ===== LOADING SCREEN MANAGEMENT ===== */
-function showLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen) {
-        requestAnimationFrame(() => {
-            loadingScreen.style.display = 'flex';
-            loadingScreen.classList.remove('hidden');
-        });
-    }
-}
-
-function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen && !loadingScreen.classList.contains('hidden')) {
-        loadingScreen.classList.add('hidden');
-        
-        setTimeout(() => {
-            if (loadingScreen && loadingScreen.parentNode) {
-                loadingScreen.style.display = 'none';
-            }
-        }, 500);
-    }
-}
-
-/* ===== NAVIGATION SYSTEM ===== */
-// Update user info from localStorage
-function updateUserInfoFromStorage() {
-    const savedAuth = localStorage.getItem('telegram_auth');
-    if (savedAuth) {
-        try {
-            const authData = JSON.parse(savedAuth);
-            
-            // Update mobile user info
-            const mobileUserName = document.querySelector('.mobile-user h4');
-            if (mobileUserName) {
-                mobileUserName.textContent = authData.first_name || 'SieuLuxury';
-            }
-            
-            // Update desktop user info
-            const desktopUserName = document.querySelector('.nav-user-details h4');
-            if (desktopUserName) {
-                desktopUserName.textContent = authData.first_name || 'SieuLuxury';
-            }
-            
-            // Update avatars
-            const avatars = document.querySelectorAll('.user-avatar, .nav-user-avatar');
-            avatars.forEach(avatar => {
-                if (authData.first_name) {
-                    avatar.textContent = authData.first_name.substring(0, 2).toUpperCase();
-                }
-            });
-            
-        } catch (error) {
-            console.error('Error updating user info:', error);
-        }
-    }
-}
-
-// Function to load script dynamically
-function loadScript(src) {
-    return new Promise((resolve, reject) => {
-        if (document.querySelector(`script[src="${src}"]`)) {
-            resolve();
-            return;
-        }
-        
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-        document.head.appendChild(script);
-    });
-}
-
-// Navigation Loader - Universal navigation loading for all pages
-function loadNavigation(activePage, isSubdirectory = false) {
-    if (!checkAuthentication()) {
-        return Promise.reject(new Error('Authentication required'));
-    }
-    
-    const navPath = isSubdirectory ? '../navigation.html' : 'navigation.html';
-    const timestamp = new Date().getTime();
-    const cacheBustedPath = `${navPath}?v=${timestamp}`;
-    
-    return fetch(cacheBustedPath)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.text();
-        })
-        .then(data => {
-            const currentContent = document.body.innerHTML;
-            document.body.innerHTML = data + currentContent;
-            
-            updateUserInfoFromStorage();
-            setActiveNavigation(activePage);
-            
-            setTimeout(() => {
-                initializeAfterLoad();
-            }, 100);
-            
-            function initializeAfterLoad() {
-                if (typeof handleSelectFocus === 'function') {
-                    handleSelectFocus();
-                }
-                
-                if (typeof ToastManager !== 'undefined') {
-                    window.toastManager = new ToastManager();
-                }
-                
-                const mainContent = document.getElementById('mainContent');
-                if (mainContent) {
-                    mainContent.style.opacity = '1';
-                    mainContent.style.visibility = 'visible';
-                    mainContent.style.transition = 'opacity 0.3s ease-in-out, visibility 0.3s ease-in-out';
-                }
-                
-                hideLoadingScreen();
-            }
-        })
-        .catch(error => {
-            console.error('Error loading navigation:', error);
-            hideLoadingScreen();
-            
-            document.body.innerHTML = `
-                <div style="padding: 50px; text-align: center; color: #f87171; background: rgba(15, 15, 35, 0.95); border-radius: 20px; margin: 20px;">
-                    <h3>⚠️ Navigation Loading Error</h3>
-                    <p>Failed to load navigation from: ${navPath}</p>
-                    <p>Error: ${error.message}</p>
-                    <button onclick="location.reload()" style="padding: 10px 20px; margin-top: 20px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">
-                        🔄 Refresh Page
-                    </button>
-                </div>
-            ` + document.body.innerHTML;
-        });
-}
-
-// Smart Navigation Highlighting System
-function setActiveNavigation(currentPage) {
-    // Remove all active states first
-    const allNavLinks = document.querySelectorAll('.nav-link, .bottom-nav-item');
-    allNavLinks.forEach(link => {
-        link.classList.remove('active');
-    });
-    
-    // Page mapping for navigation highlighting
-    const pageMapping = {
-        'home': ['home'],
-        'index': ['home'],
-        'topup': ['topup'],
-        'settings': ['settings'],
-        'setting': ['settings'],
-        
-        'checkers': ['checkers'],
-        'checker': ['checkers'],
-        'stripe_auth': ['checkers'],
-        'stripe-auth': ['checkers'],
-        'braintree_auth': ['checkers'],
-        'braintree-auth': ['checkers'],
-        'shopify_auto': ['checkers'],
-        'shopify-auto': ['checkers'],
-        
-        'tools': ['tools'],
-        'tool': ['tools'],
-        'bin_lookup': ['tools'],
-        'bin-lookup': ['tools'],
-        '3ds_lookup': ['tools'],
-        '3ds-lookup': ['tools'],
-        'card_generator': ['tools'],
-        'card-generator': ['tools'],
-        
-        'database': ['database-users'],
-        'database-users': ['database-users'],
-        'database-logs': ['database-logs'],
-        'database-transactions': ['database-transactions'],
-        'user_data': ['database-users'],
-        'transaction_logs': ['database-logs']
-    };
-    
-    let activeNavItems = [];
-    
-    if (pageMapping[currentPage]) {
-        activeNavItems = pageMapping[currentPage];
-    } else {
-        for (const [page, navItems] of Object.entries(pageMapping)) {
-            if (currentPage.includes(page) || page.includes(currentPage)) {
-                activeNavItems = navItems;
-                break;
-            }
-        }
-    }
-    
-    activeNavItems.forEach(navItem => {
-        const desktopLink = document.querySelector(`.nav-link[data-page="${navItem}"]`);
-        if (desktopLink) {
-            desktopLink.classList.add('active');
-        }
-        
-        const mobileLink = document.querySelector(`.bottom-nav-item[data-page="${navItem}"]`);
-        if (mobileLink) {
-            mobileLink.classList.add('active');
-        }
-    });
-    
-    if (activeNavItems.length === 0) {
-        allNavLinks.forEach(link => {
-            const linkPage = link.getAttribute('data-page');
-            if (linkPage && (linkPage.includes(currentPage) || currentPage.includes(linkPage))) {
-                link.classList.add('active');
-            }
-        });
-    }
-}
-
-/* ===== MODAL SYSTEM ===== */
 // Modal configurations
 const modalConfigs = {
     checkers: {
@@ -440,6 +139,7 @@ const modalConfigs = {
     }
 };
 
+// Modal functions
 function showModal(type) {
     const config = modalConfigs[type];
     if (!config) return;
@@ -487,26 +187,50 @@ function showModal(type) {
 
     modalGrid.innerHTML = itemsHTML;
     overlay.classList.add('active');
+
+    
+    // HIGHLIGHT NAVIGATION WHEN MODAL OPENS
+    
+    // TRIGGER FOCUS RING for Checkers/Tools
+    const desktopNav = document.querySelector(`.nav-link[data-page="${type}"]`);
+    const bottomNav = document.querySelector(`.bottom-nav-item[data-page="${type}"]`);
+    
+    if (desktopNav) {
+        desktopNav.focus();
+    }
+    if (bottomNav) {
+        bottomNav.focus();
+    }
     
     highlightNavigation(type);
+
+
+    // Removed toast notification for cleaner UX
 }
 
+// Function to highlight navigation items (USE CSS CLASSES FOR GLOW EFFECT)
 function highlightNavigation(section) {
+    
+    // Remove all active states first
     const allNavElements = document.querySelectorAll('.nav-link, .bottom-nav-item');
     
     allNavElements.forEach(el => {
         el.classList.remove('active');
+        // Clear any inline styles
         el.style.cssText = '';
     });
     
+    // Find and highlight the correct navigation elements (BOTH desktop and mobile)
     const activeElements = document.querySelectorAll(`[data-page="${section}"]`);
     
     if (activeElements.length > 0) {
         activeElements.forEach((element, index) => {
+            // USE CSS CLASSES ONLY - Let CSS handle the glow effects
             element.classList.add('active');
         });
     }
     
+    // FORCE CHECK: Manually verify highlighting for checkers/tools
     const desktopCheckers = document.querySelector('.nav-link[data-page="checkers"]');
     const desktopTools = document.querySelector('.nav-link[data-page="tools"]');
     const bottomNavCheckers = document.querySelector('.bottom-nav-item[data-page="checkers"]');
@@ -529,6 +253,12 @@ function highlightNavigation(section) {
             bottomNavTools.classList.add('active');
         }
     }
+    
+    // Final verification
+    const finalActiveElements = document.querySelectorAll('.nav-link.active, .bottom-nav-item.active');
+    finalActiveElements.forEach((el, index) => {
+        // console.log(`   [${index + 1}] ${el.tagName}[data-page="${el.getAttribute('data-page')}"] - CSS glow active`);
+    });
 }
 
 function closeModal(event) {
@@ -537,12 +267,16 @@ function closeModal(event) {
     const overlay = document.getElementById('modalOverlay');
     overlay.classList.remove('active');
     
+    // REMOVE HIGHLIGHT WHEN MODAL CLOSES (CLEAR CSS CLASSES FOR GLOW EFFECT)
     const allNavElements = document.querySelectorAll('.nav-link, .bottom-nav-item');
     allNavElements.forEach(el => {
         el.classList.remove('active');
+        // Clear any inline styles
         el.style.cssText = '';
     });
+    // console.log(`🌟 All navigation glow effects cleared via CSS classes`);
     
+    // Re-highlight the current page if we're on a specific page
     if (typeof currentPage !== 'undefined' && currentPage !== 'home') {
         setTimeout(() => {
             if (typeof setActiveNavigation === 'function') {
@@ -550,82 +284,44 @@ function closeModal(event) {
             }
         }, 100);
     }
+    
+    // Removed toast notification for cleaner UX
 }
 
 function selectModalItem(itemId) {
     closeModal();
     goToPage(itemId);
+    // Removed toast notification for cleaner UX
 }
 
-/* ===== CARD FUNCTIONALITY ===== */
-// Card detection and generation functions
-function detectCardType(bin) {
-    if (!bin) return 'visa';
-    const b = bin.toString();
-    if (b.startsWith('34') || b.startsWith('37')) return 'amex';
-    if (b.startsWith('35')) return 'jcb';
-    if (b.startsWith('4')) return 'visa';
-    if (b.startsWith('5') || (parseInt(b.slice(0, 4)) >= 2221 && parseInt(b.slice(0, 4)) <= 2720)) return 'mastercard';
-    if (b.startsWith('6011') || b.startsWith('622') || b.startsWith('64') || b.startsWith('65')) return 'discover';
-    if (b.startsWith('30') || b.startsWith('36') || b.startsWith('38') || b.startsWith('39')) return 'diners';
-    return 'visa';
-}
-
-function getCardInfo(cardType) {
-    const cardInfo = {
-        visa: { length: 16, cvvLength: 3 },
-        mastercard: { length: 16, cvvLength: 3 },
-        amex: { length: 15, cvvLength: 4 },
-        discover: { length: 16, cvvLength: 3 },
-        jcb: { length: 15, cvvLength: 3 },
-        diners: { length: 16, cvvLength: 3 }
-    };
-    return cardInfo[cardType] || { length: 16, cvvLength: 3 };
-}
-
-function generateCheckDigit(number) {
-    let sum = 0;
-    let isEven = false;
-    for (let i = number.length - 1; i >= 0; i--) {
-        let digit = parseInt(number[i]);
-        if (isEven) {
-            digit *= 2;
-            if (digit > 9) digit -= 9;
-        }
-        sum += digit;
-        isEven = !isEven;
-    }
-    return (10 - (sum % 10)) % 10;
-}
-
-function generatePAN(bin, cardType) {
-    const cardInfo = getCardInfo(cardType);
-    const remainingLength = cardInfo.length - bin.length;
-    let pan = bin;
+// Sample data functions
+function loadSampleCards(type) {
+    const sampleCards = [
+        '4532123456789012|12|2025|123',
+        '5555555555554444|01|2026|456',
+        '4111111111111111|03|2027|789',
+        '4000000000000002|05|2025|321',
+        '5105105105105100|08|2026|654'
+    ];
     
-    for (let i = 0; i < remainingLength - 1; i++) {
-        pan += Math.floor(Math.random() * 10);
+    const textarea = document.getElementById(type + 'Cards');
+    if (textarea) {
+        textarea.value = sampleCards.join('\n');
+        toastManager.success('Sample Loaded', `Sample cards loaded for ${type}`);
     }
-    
-    pan += generateCheckDigit(pan);
-    return pan;
 }
 
-function generateRandomMonth() {
-    return String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0');
+function loadSampleBIN() {
+    document.getElementById('binNumber').value = '453212';
+    toastManager.info('Sample BIN', 'Sample BIN number loaded');
 }
 
-function generateRandomYear() {
-    const years = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033'];
-    return years[Math.floor(Math.random() * years.length)];
+function loadSample3DS() {
+    document.getElementById('threeDSCard').value = '4532123456789012';
+    toastManager.info('Sample Card', 'Sample card number loaded for 3DS lookup');
 }
 
-function generateRandomCVV(cardType) {
-    const { cvvLength } = getCardInfo(cardType);
-    return String(Math.floor(Math.random() * Math.pow(10, cvvLength))).padStart(cvvLength, '0');
-}
-
-/* ===== CHECKER FUNCTIONS ===== */
+// Checker functions
 function startStripeCheck() {
     const cards = document.getElementById('stripeCards').value.trim();
     if (!cards) {
@@ -640,6 +336,11 @@ function startStripeCheck() {
         <h4 style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px; font-size: 1.4rem; font-weight: 700;">
             <i class="fas fa-spinner fa-spin" style="background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
             Đang kiểm tra...
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </h4>
         <table class="results-table">
             <thead>
@@ -673,6 +374,7 @@ function startStripeCheck() {
         const card = cardList[index].trim();
         const tbody = document.getElementById('stripeResultsBody');
         
+        // Simulate random results
         const statuses = ['Live', 'Dead', 'Unknown'];
         const responses = ['Approved', 'Declined', 'Insufficient Funds', 'Invalid Card', 'CVV Mismatch'];
         const gateways = ['Stripe v1', 'Stripe v3', 'Stripe Connect'];
@@ -751,61 +453,8 @@ function lookup3DS() {
     toastManager.info('Coming Soon', '3DS lookup sẽ được triển khai ở đây');
 }
 
-function start3DSCheck() {
-    const card = document.getElementById('threeDSCard').value.trim();
-    if (!card) {
-        toastManager.error('Input Required', 'Vui lòng nhập số thẻ để kiểm tra 3DS');
-        return;
-    }
-    
-    toastManager.info('Checking 3DS', '3DS Security lookup is starting...');
-    
-    const resultsDiv = document.getElementById('threeDSResults');
-    resultsDiv.innerHTML = `
-        <h4 style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px; font-size: 1.4rem; font-weight: 700;">
-            <i class="fas fa-spinner fa-spin" style="background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
-            Checking 3DS Status...
-        </h4>
-        <div class="form-container">
-            <p style="color: var(--success); font-weight: 600;">✓ 3D Secure: Enabled</p>
-            <p style="color: var(--info);">Bank: Sample Bank</p>
-            <p style="color: var(--text-gray);">Country: US</p>
-        </div>
-    `;
-    
-    setTimeout(() => {
-        toastManager.success('3DS Check Complete', '3DS security status retrieved successfully');
-    }, 2000);
-}
+// Removed duplicate generateCards function to prevent conflicts
 
-/* ===== SAMPLE DATA FUNCTIONS ===== */
-function loadSampleCards(type) {
-    const sampleCards = [
-        '4532123456789012|12|2025|123',
-        '5555555555554444|01|2026|456',
-        '4111111111111111|03|2027|789',
-        '4000000000000002|05|2025|321',
-        '5105105105105100|08|2026|654'
-    ];
-    
-    const textarea = document.getElementById(type + 'Cards');
-    if (textarea) {
-        textarea.value = sampleCards.join('\n');
-        toastManager.success('Sample Loaded', `Sample cards loaded for ${type}`);
-    }
-}
-
-function loadSampleBIN() {
-    document.getElementById('binNumber').value = '453212';
-    toastManager.info('Sample BIN', 'Sample BIN number loaded');
-}
-
-function loadSample3DS() {
-    document.getElementById('threeDSCard').value = '4532123456789012';
-    toastManager.info('Sample Card', 'Sample card number loaded for 3DS lookup');
-}
-
-/* ===== UTILITY FUNCTIONS ===== */
 function clearResults() {
     document.querySelectorAll('[id$="Results"]').forEach(el => {
         el.innerHTML = '';
@@ -813,9 +462,39 @@ function clearResults() {
     toastManager.success('Results Cleared', 'All results have been cleared');
 }
 
-function clearGenerated() {
-    document.getElementById('generatedResults').innerHTML = '';
-    toastManager.info('Cleared', 'Generated cards cleared');
+function selectPackage(credits, price) {
+    toastManager.success('Package Selected', `Đã chọn: ${credits} credits với giá $${price}`);
+}
+
+function processPayment() {
+    const method = document.getElementById('paymentMethod').value;
+    toastManager.info('Processing Payment', `Đang xử lý thanh toán qua ${method}`);
+}
+
+function saveSettings() {
+    toastManager.success('Settings Saved', 'Cài đặt đã được lưu thành công!');
+}
+
+function resetSettings() {
+    if (confirm('Bạn có chắc chắn muốn reset về cài đặt mặc định?')) {
+        toastManager.warning('Settings Reset', 'Đã reset cài đặt thành công!');
+    }
+}
+
+function toggleApiKey() {
+    const input = document.getElementById('apikey');
+    const btn = event.target.closest('button');
+    const icon = btn.querySelector('i');
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fas fa-eye-slash';
+        toastManager.info('API Key', 'API Key is now visible');
+    } else {
+        input.type = 'password';
+        icon.className = 'fas fa-eye';
+        toastManager.info('API Key', 'API Key is now hidden');
+    }
 }
 
 function copyToClipboard(text) {
@@ -843,72 +522,19 @@ function downloadCards(cards, type) {
     toastManager.success('Download Started', `${type} cards file downloaded`);
 }
 
-/* ===== FORM HANDLING ===== */
-function handleSelectFocus() {
-    document.querySelectorAll('select').forEach(select => {
-        const wrapper = select.closest('.select-wrapper');
-        if (!wrapper) return;
-
-        select.addEventListener('focus', () => {
-            wrapper.classList.add('focused');
-        });
-
-        select.addEventListener('blur', () => {
-            wrapper.classList.remove('focused');
-        });
-    });
+function logout() {
+    toastManager.info('Logging out', 'Đang đăng xuất...');
+    setTimeout(() => {
+        window.location.href = '/web/index';
+    }, 1000);
 }
 
-function toggleApiKey() {
-    const input = document.getElementById('apikey');
-    const btn = event.target.closest('button');
-    const icon = btn.querySelector('i');
-    
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.className = 'fas fa-eye-slash';
-        toastManager.info('API Key', 'API Key is now visible');
-    } else {
-        input.type = 'password';
-        icon.className = 'fas fa-eye';
-        toastManager.info('API Key', 'API Key is now hidden');
-    }
-}
-
-/* ===== PAYMENT & SETTINGS ===== */
-function selectPackage(credits, price) {
-    toastManager.success('Package Selected', `Đã chọn: ${credits} credits với giá $${price}`);
-}
-
-function processPayment() {
-    const method = document.getElementById('paymentMethod').value;
-    toastManager.info('Processing Payment', `Đang xử lý thanh toán qua ${method}`);
-}
-
-function saveSettings() {
-    toastManager.success('Settings Saved', 'Cài đặt đã được lưu thành công!');
-}
-
-function resetSettings() {
-    if (confirm('Bạn có chắc chắn muốn reset về cài đặt mặc định?')) {
-        toastManager.warning('Settings Reset', 'Đã reset cài đặt thành công!');
-    }
-}
-
-/* ===== DATABASE FUNCTIONS ===== */
+// Database functions
 function refreshLogs() {
     toastManager.info('Refreshing', 'Đang tải lại dữ liệu system logs...');
     setTimeout(() => {
         toastManager.success('Refreshed', 'System logs đã được cập nhật thành công!');
     }, 2000);
-}
-
-function clearLogs() {
-    toastManager.warning('Clear Logs', 'This feature will be implemented soon');
-}
-
-function generateSampleLogs() {
-    toastManager.info('Generating', 'Sample logs will be generated');
 }
 
 function importLogs() {
@@ -920,14 +546,6 @@ function refreshTransactions() {
     setTimeout(() => {
         toastManager.success('Refreshed', 'Transaction history đã được cập nhật!');
     }, 2000);
-}
-
-function exportTransactions() {
-    toastManager.info('Exporting', 'Transaction export will be implemented');
-}
-
-function generateSampleTransactions() {
-    toastManager.info('Generating', 'Sample transaction data will be generated');
 }
 
 // User action functions
@@ -945,8 +563,39 @@ function deleteUser(id, name) {
     }
 }
 
-/* ===== NAVIGATION FUNCTION ===== */
+// Handle select focus states
+function handleSelectFocus() {
+    document.querySelectorAll('select').forEach(select => {
+        const wrapper = select.closest('.select-wrapper');
+        if (!wrapper) return;
+
+        select.addEventListener('focus', () => {
+            wrapper.classList.add('focused');
+        });
+
+        select.addEventListener('blur', () => {
+            wrapper.classList.remove('focused');
+        });
+    });
+}
+
+// Demo function to test all toast types
+function testToasts() {
+    toastManager.success('Success Test', 'This is a success message with longer text to test wrapping!');
+    setTimeout(() => {
+        toastManager.error('Error Test', 'This is an error message to test the error styling and progress bar!');
+    }, 1000);
+    setTimeout(() => {
+        toastManager.warning('Warning Test', 'This is a warning message to test all toast types!');
+    }, 2000);
+    setTimeout(() => {
+        toastManager.info('Info Test', 'This is an info message to complete the toast testing!');
+    }, 3000);
+}
+
+// Navigation function
 function goToPage(page) {
+    // Define page mappings with root-relative paths
     const pageUrls = {
         'home': '/web/index',
         'topup': '/web/topup', 
@@ -962,34 +611,26 @@ function goToPage(page) {
         'database-transactions': '/web/database/transactions'
     };
 
+    // Get the URL for the page
     const url = pageUrls[page];
     if (url) {
+        // Show navigation toast
         toastManager.success('Navigation', `Navigating to ${page.replace('-', ' ').toUpperCase()}`);
+        
+        // Redirect to the actual page using absolute path
         window.location.href = url;
     } else {
         toastManager.error('Error', `Page ${page} not found`);
     }
 }
 
-/* ===== TEST FUNCTIONS ===== */
-function testToasts() {
-    toastManager.success('Success Test', 'This is a success message with longer text to test wrapping!');
-    setTimeout(() => {
-        toastManager.error('Error Test', 'This is an error message to test the error styling and progress bar!');
-    }, 1000);
-    setTimeout(() => {
-        toastManager.warning('Warning Test', 'This is a warning message to test all toast types!');
-    }, 2000);
-    setTimeout(() => {
-        toastManager.info('Info Test', 'This is an info message to complete the toast testing!');
-    }, 3000);
-}
-
-/* ===== INITIALIZATION ===== */
+// Initialize page
 document.addEventListener('DOMContentLoaded', function() {
+    // Wait for DOM to be fully loaded
     setTimeout(() => {
         handleSelectFocus();
         
+        // Only show welcome toast on home page
         if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
             toastManager.success('Welcome!', 'Chào mừng đến với Premium CC Checker!');
         }
@@ -1003,8 +644,67 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Make functions globally available
-window.logout = logout;
-window.isAuthenticated = isAuthenticated;
-window.getUserData = getUserData;
-window.toastManager = toastManager;
+// Additional functions for new pages
+function start3DSCheck() {
+    const card = document.getElementById('threeDSCard').value.trim();
+    if (!card) {
+        toastManager.error('Input Required', 'Vui lòng nhập số thẻ để kiểm tra 3DS');
+        return;
+    }
+    
+    toastManager.info('Checking 3DS', '3DS Security lookup is starting...');
+    
+    const resultsDiv = document.getElementById('threeDSResults');
+    resultsDiv.innerHTML = `
+        <h4 style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px; font-size: 1.4rem; font-weight: 700;">
+            <i class="fas fa-spinner fa-spin" style="background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+            Checking 3DS Status...
+        </h4>
+        <div class="form-container">
+            <p style="color: var(--success); font-weight: 600;">✓ 3D Secure: Enabled</p>
+            <p style="color: var(--info);">Bank: Sample Bank</p>
+            <p style="color: var(--text-gray);">Country: US</p>
+        </div>
+    `;
+    
+    setTimeout(() => {
+        toastManager.success('3DS Check Complete', '3DS security status retrieved successfully');
+    }, 2000);
+}
+
+
+
+function clearGenerated() {
+    document.getElementById('generatedResults').innerHTML = '';
+    toastManager.info('Cleared', 'Generated cards cleared');
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        toastManager.success('Copied!', 'Cards copied to clipboard');
+    });
+}
+
+function refreshLogs() {
+    toastManager.info('Refreshing', 'Refreshing system logs...');
+}
+
+function clearLogs() {
+    toastManager.warning('Clear Logs', 'This feature will be implemented soon');
+}
+
+function generateSampleLogs() {
+    toastManager.info('Generating', 'Sample logs will be generated');
+}
+
+function refreshTransactions() {
+    toastManager.info('Refreshing', 'Refreshing transaction data...');
+}
+
+function exportTransactions() {
+    toastManager.info('Exporting', 'Transaction export will be implemented');
+}
+
+function generateSampleTransactions() {
+    toastManager.info('Generating', 'Sample transaction data will be generated');
+}
