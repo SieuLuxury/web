@@ -708,3 +708,205 @@ function exportTransactions() {
 function generateSampleTransactions() {
     toastManager.info('Generating', 'Sample transaction data will be generated');
 }
+
+let generatedCards = [];
+let cardData = [];
+const generatedPANSet = new Set();
+
+document.addEventListener('DOMContentLoaded', function () {
+    updateCardInfo();
+});
+
+function detectCardType(bin) {
+    if (!bin) return 'visa';
+    const b = bin.toString();
+    if (b.startsWith('34') || b.startsWith('37')) return 'amex';
+    if (b.startsWith('35')) return 'jcb';
+    if (b.startsWith('4')) return 'visa';
+    if (b.startsWith('5') || (parseInt(b.slice(0, 4)) >= 2221 && parseInt(b.slice(0, 4)) <= 2720)) return 'mastercard';
+    if (b.startsWith('6011') || b.startsWith('622') || b.startsWith('64') || b.startsWith('65')) return 'discover';
+    if (b.startsWith('30') || b.startsWith('36') || b.startsWith('38') || b.startsWith('39')) return 'diners';
+    return 'visa';
+}
+
+function getCardInfo(cardType) {
+    const cardInfo = {
+        visa: { length: 16, cvvLength: 3 },
+        mastercard: { length: 16, cvvLength: 3 },
+        amex: { length: 15, cvvLength: 4 },
+        discover: { length: 16, cvvLength: 3 },
+        jcb: { length: 15, cvvLength: 3 },
+        diners: { length: 16, cvvLength: 3 }
+    };
+    return cardInfo[cardType] || { length: 16, cvvLength: 3 };
+}
+
+function generateCheckDigit(number) {
+    let sum = 0;
+    let isEven = false;
+    for (let i = number.length - 1; i >= 0; i--) {
+        let digit = parseInt(number[i]);
+        if (isEven) {
+            digit *= 2;
+            if (digit > 9) digit -= 9;
+        }
+        sum += digit;
+        isEven = !isEven;
+    }
+    return (10 - (sum % 10)) % 10;
+}
+
+function generatePAN(bin, cardType) {
+    const cardInfo = getCardInfo(cardType);
+    let pan, attempts = 0;
+    do {
+        pan = bin;
+        while (pan.length < cardInfo.length - 1) {
+            pan += Math.floor(Math.random() * 10);
+        }
+        pan += generateCheckDigit(pan);
+        attempts++;
+        if (attempts > 1000) throw new Error("Too many duplicates");
+    } while (generatedPANSet.has(pan));
+    generatedPANSet.add(pan);
+    return pan;
+}
+
+function generateRandomMonth() {
+    return String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0');
+}
+
+function generateRandomYear() {
+    const years = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033'];
+    return years[Math.floor(Math.random() * years.length)];
+}
+
+function generateRandomCVV(cardType) {
+    const { cvvLength } = getCardInfo(cardType);
+    return String(Math.floor(Math.random() * Math.pow(10, cvvLength))).padStart(cvvLength, '0');
+}
+
+function updateCardInfo() {
+    const binInput = document.getElementById('binNumber');
+    const cvvInfo = document.getElementById('cvvInfo');
+    const bin = binInput.value.trim();
+    if (bin.length >= 2) {
+        const type = detectCardType(bin);
+        const info = getCardInfo(type);
+        cvvInfo.textContent = `Detected: ${type.toUpperCase()} (${info.length} digits, ${info.cvvLength} CVV)`;
+    } else {
+        cvvInfo.textContent = 'Enter BIN to auto-detect card type';
+    }
+}
+
+function generateCards() {
+    const bin = document.getElementById('binNumber').value.trim();
+    const monthType = document.getElementById('monthType').value;
+    const yearType = document.getElementById('yearType').value;
+    const cvvInput = document.getElementById('cvvInput').value.trim();
+    const format = document.getElementById('outputFormat').value;
+    const quantity = parseInt(document.getElementById('quantity').value) || 10;
+
+    if (bin.length < 6) {
+        toastManager.error('BIN Error', 'BIN must be at least 6 digits');
+        return;
+    }
+
+    if (quantity < 1 || quantity > 10000) {
+        toastManager.error('Quantity Error', 'Quantity must be 1–10000');
+        return;
+    }
+
+    const cardType = detectCardType(bin);
+    generatedCards = [];
+    cardData = [];
+    generatedPANSet.clear();
+
+    if (format === 'csv') {
+        generatedCards.push('card_number,expiration_month,expiration_year,cvv');
+    }
+
+    let i = 0;
+    while (i < quantity) {
+        try {
+            const pan = generatePAN(bin, cardType);
+            const month = monthType === 'random' ? generateRandomMonth() : monthType.padStart(2, '0');
+            let rawYear = yearType === 'random' ? generateRandomYear() : yearType;
+            const year = rawYear.length === 2 ? `20${rawYear}` : rawYear;
+            const cvv = cvvInput || generateRandomCVV(cardType);
+
+            const card = { card_number: pan, expiration_month: month, expiration_year: year, cvv };
+            cardData.push(card);
+
+            let line = '';
+            if (format === 'pipe') line = `${pan}|${month}|${year}|${cvv}`;
+            else if (format === 'csv') line = `${pan},${month},${year},${cvv}`;
+            else if (format === 'json') line = JSON.stringify(card);
+            else line = `${pan}|${month}|${year}|${cvv}`;
+
+            generatedCards.push(line);
+            i++;
+        } catch (e) {
+            toastManager.error('Error', e.message);
+            break;
+        }
+    }
+
+    if (format === 'json') {
+        generatedCards = [JSON.stringify(cardData, null, 2)];
+    }
+
+    displayResults();
+    toastManager.success('Generated', `${quantity} ${cardType.toUpperCase()} cards created`);
+}
+
+function displayResults() {
+    const output = document.getElementById('generatedCards');
+    const resultsSection = document.getElementById('resultsSection');
+    output.textContent = generatedCards.join('\n');
+    resultsSection.style.display = 'block';
+}
+
+function copyResults() {
+    if (generatedCards.length === 0) {
+        toastManager.error('No Data', 'No cards to copy');
+        return;
+    }
+
+    navigator.clipboard.writeText(generatedCards.join('\n')).then(() => {
+        toastManager.success('Copied', 'Results copied to clipboard');
+    }).catch(() => {
+        toastManager.error('Copy Error', 'Clipboard write failed');
+    });
+}
+
+function downloadResults() {
+    if (generatedCards.length === 0) {
+        toastManager.error('No Data', 'No cards to download');
+        return;
+    }
+
+    const bin = document.getElementById('binNumber').value.trim();
+    const quantity = parseInt(document.getElementById('quantity').value) || 10;
+    const format = document.getElementById('outputFormat').value;
+    const ext = format === 'json' ? 'json' : format === 'csv' ? 'csv' : 'txt';
+    const filename = `${bin}_${quantity}.${ext}`;
+
+    const blob = new Blob([generatedCards.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+    toastManager.success('Downloaded', `File ${filename} saved`);
+}
+
+function copySingleCard(cardText) {
+    navigator.clipboard.writeText(cardText).then(() => {
+        toastManager.success('Copied', 'Card copied to clipboard');
+    }).catch(() => {
+        toastManager.error('Copy Error', 'Failed to copy card');
+    });
+}
