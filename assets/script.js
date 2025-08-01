@@ -5,9 +5,22 @@ class ToastManager {
     constructor() {
         this.container = document.getElementById('toastContainer');
         this.toasts = [];
+        // Don't throw error if container doesn't exist yet
+        if (!this.container) {
+            console.warn('Toast container not found. ToastManager will be non-functional until container is available.');
+        }
     }
 
     show(type, title, message, duration = 5000) {
+        // Check if container exists before proceeding
+        if (!this.container) {
+            this.container = document.getElementById('toastContainer');
+            if (!this.container) {
+                console.warn('Toast container still not available. Cannot show toast:', { type, title, message });
+                return null;
+            }
+        }
+
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
         
@@ -85,7 +98,26 @@ class ToastManager {
     info(title, message) { return this.show('info', title, message); }
 }
 
-const toastManager = new ToastManager();
+// Initialize toast manager after navigation loads (will be overridden by navigation-loader.js)
+let toastManager = null;
+
+// Create a safe toast manager that handles missing container
+function getToastManager() {
+    if (!toastManager) {
+        toastManager = new ToastManager();
+    }
+    return toastManager;
+}
+
+// Override global toastManager access
+Object.defineProperty(window, 'toastManager', {
+    get: function() {
+        return getToastManager();
+    },
+    set: function(value) {
+        toastManager = value;
+    }
+});
 
 // Modal configurations
 const modalConfigs = {
