@@ -131,13 +131,11 @@
     </style>
 </head>
 <body>
-    <!-- Load Navigation -->
     <script src="../assets/navigation-loader.js"></script>
     <script>
         loadNavigation('card-generator', true);
     </script>
 
-    <!-- Main Content (hidden until navigation loads) -->
     <main class="main-content" style="opacity: 0; visibility: hidden;" id="mainContent">
         <header class="page-header">
             <h1>Card Generator</h1>
@@ -151,8 +149,6 @@
                     Advanced Card Generator
                 </h3>
 
-                <!-- BIN Input -->
-                <div class="card">
                     <h4 style="margin-bottom: 20px; color: #667eea;">
                         <i class="fas fa-hashtag"></i> Card Configuration
                     </h4>
@@ -162,10 +158,8 @@
                         <input type="text" id="binNumber" class="form-control" placeholder="453212" maxlength="8" oninput="updateCardInfo()">
                         <small>Enter the first 6-8 digits of the card number. Card type will be auto-detected.</small>
                     </div>
-                </div>
+        
 
-                <!-- Expiry Date Settings -->
-                <div class="card">
                     <h4 style="margin-bottom: 20px; color: #667eea;">
                         <i class="fas fa-calendar"></i> Expiry Date Settings
                     </h4>
@@ -206,10 +200,8 @@
                             </select>
                         </div>
                     </div>
-                </div>
+    
 
-                <!-- CVV Settings -->
-                <div class="card">
                     <h4 style="margin-bottom: 20px; color: #667eea;">
                         <i class="fas fa-shield-alt"></i> CVV Settings
                     </h4>
@@ -219,10 +211,8 @@
                         <input type="text" id="cvvInput" class="form-control" placeholder="000 (optional)" maxlength="4">
                         <small id="cvvInfo">Leave empty to generate random CVV</small>
                     </div>
-                </div>
+        
 
-                <!-- Output Format -->
-                <div class="card">
                     <h4 style="margin-bottom: 20px; color: #667eea;">
                         <i class="fas fa-file-code"></i> Output Format
                     </h4>
@@ -235,10 +225,8 @@
                             <option value="json">JSON Format</option>
                         </select>
                     </div>
-                </div>
+        
 
-                <!-- Quantity -->
-                <div class="card">
                     <h4 style="margin-bottom: 20px; color: #667eea;">
                         <i class="fas fa-list-ol"></i> Quantity
                     </h4>
@@ -248,7 +236,7 @@
                         <input type="number" id="quantity" class="form-control" placeholder="10" min="1" max="1000" value="10">
                         <small>Enter the number of cards to generate (1-1000)</small>
                     </div>
-                </div>
+        
 
                 <!-- Action Buttons -->
                 <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
