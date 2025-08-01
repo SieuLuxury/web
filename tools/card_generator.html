@@ -148,22 +148,16 @@
                     <i class="fas fa-credit-card" style="font-size: 2rem; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
                     Advanced Card Generator
                 </h3>
-
-                <h4 style="margin-bottom: 20px; color: #667eea;">
-                    <i class="fas fa-hashtag"></i> Card Configuration
-                </h4>
+                
                 <div class="form-group">
                     <label for="binNumber">BIN Number</label>
                     <input type="text" id="binNumber" class="form-control" placeholder="453212" maxlength="8" oninput="updateCardInfo()">
                     <small>Enter the first 6-8 digits of the card number. Card type will be auto-detected.</small>
                 </div>
 
-                <h4 style="margin-bottom: 20px; color: #667eea;">
-                    <i class="fas fa-calendar"></i> Expiry Date Settings
-                </h4>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label for="monthType">Month Selection</label>
+                        <label for="monthType">Expiration Month</label>
                         <select id="monthType" class="form-control">
                             <option value="random">Random</option>
                             <option value="01">01</option>
@@ -181,7 +175,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="yearType">Year Selection</label>
+                        <label for="yearType">Expiration Year</label>
                         <select id="yearType" class="form-control">
                             <option value="random">Random</option>
                             <option value="2025">2025</option>
@@ -197,18 +191,12 @@
                     </div>
                 </div>
 
-                <h4 style="margin-bottom: 20px; color: #667eea;">
-                    <i class="fas fa-shield-alt"></i> CVV Settings
-                </h4>
                 <div class="form-group">
-                    <label for="cvvInput">CVV (leave empty for random)</label>
+                    <label for="cvvInput">CVV </label>
                     <input type="text" id="cvvInput" class="form-control" placeholder="000 (optional)" maxlength="4">
                     <small id="cvvInfo">Leave empty to generate random CVV</small>
                 </div>
 
-                <h4 style="margin-bottom: 20px; color: #667eea;">
-                    <i class="fas fa-file-code"></i> Output Format
-                </h4>
                 <div class="form-group">
                     <label for="outputFormat">Format Type</label>
                     <select id="outputFormat" class="form-control">
@@ -218,11 +206,8 @@
                     </select>
                 </div>
 
-                <h4 style="margin-bottom: 20px; color: #667eea;">
-                    <i class="fas fa-list-ol"></i> Quantity
-                </h4>
                 <div class="form-group">
-                    <label for="quantity">Number of Cards</label>
+                    <label for="quantity">Quantity</label>
                     <input type="number" id="quantity" class="form-control" placeholder="10" min="1" max="1000" value="10">
                     <small>Enter the number of cards to generate (1-1000)</small>
                 </div>
